@@ -9,4 +9,10 @@ const makeSelectCountry = () =>
     (application) => application.selectedCountry,
   );
 
-export { selectApplication, makeSelectCountry };
+const makeAvailableCountries = () =>
+  createSelector(
+    selectApplication,
+    (application) => application.availableCountries,
+  );
+
+export { selectApplication, makeSelectCountry, makeAvailableCountries };
