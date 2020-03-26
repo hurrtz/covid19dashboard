@@ -1,11 +1,16 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
 
-import { SET_SELECTED_COUNTRY, SET_AVAILABLE_COUNTRIES } from './constants';
+import {
+  SET_SELECTED_COUNTRY,
+  SET_AVAILABLE_COUNTRIES,
+  SET_COUNTRY_DATA,
+} from './constants';
 
 export const initialState = {
-  selectedCountry: 'en',
+  selectedCountry: '',
   availableCountries: [],
+  data: {},
 };
 
 const applicationReducer = (state = initialState, action) =>
@@ -17,6 +22,10 @@ const applicationReducer = (state = initialState, action) =>
 
       case SET_AVAILABLE_COUNTRIES:
         draft.availableCountries = action.payload;
+        break;
+
+      case SET_COUNTRY_DATA:
+        draft.data[state.selectedCountry] = action.payload;
         break;
 
       default:

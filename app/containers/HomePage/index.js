@@ -1,10 +1,3 @@
-/*
- * HomePage
- *
- * This is the first thing users see of our App, at the '/' route
- *
- */
-
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
@@ -18,11 +11,20 @@ import {
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
+import { LineChart, XAxis, YAxis, CartesianGrid, Line } from 'recharts';
 
 import { useInjectSaga } from 'utils/injectSaga';
 
-import { makeSelectCountry, makeAvailableCountries } from './selectors';
-import { setSelectedCountry, fetchCountries } from './actions';
+import {
+  makeSelectCountry,
+  makeAvailableCountries,
+  makeMappedCountryData,
+} from './selectors';
+import {
+  setSelectedCountry,
+  fetchCountries,
+  fetchCountryData,
+} from './actions';
 import saga from './saga';
 
 import messages from './messages';
@@ -32,14 +34,20 @@ const key = 'APPLICATION';
 const homePage = ({
   selectedCountry,
   availableCountries,
-  handleSetSelectedCountry,
+  onSetSelectedCountry,
   handleFetchCountries,
+  onFetchCountryData,
+  data,
 }) => {
   useInjectSaga({ key, saga });
 
   useEffect(() => {
     handleFetchCountries();
   }, []);
+
+  useEffect(() => {
+    onFetchCountryData();
+  }, [selectedCountry]);
 
   return (
     <Grid container direction="column">
@@ -57,7 +65,7 @@ const homePage = ({
           <FormControl>
             <NativeSelect
               value={selectedCountry}
-              onChange={(event) => handleSetSelectedCountry(event.target.value)}
+              onChange={(event) => onSetSelectedCountry(event.target.value)}
             >
               {availableCountries.map((country) => (
                 <option key={country.Country} value={country.Country}>
@@ -67,6 +75,16 @@ const homePage = ({
             </NativeSelect>
             <FormHelperText>select your country</FormHelperText>
           </FormControl>
+        </Grid>
+        <Grid item>
+          {data && (
+            <LineChart width={500} height={300} data={data}>
+              <XAxis dataKey="name" />
+              <YAxis />
+              <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+              <Line type="monotone" dataKey="confirmed" stroke="#8884d8" />
+            </LineChart>
+          )}
         </Grid>
       </Grid>
     </Grid>
@@ -82,22 +100,36 @@ homePage.propTypes = {
       Provinces: PropTypes.arrayOf(PropTypes.string),
     }),
   ),
-  handleSetSelectedCountry: PropTypes.func.isRequired,
+  onSetSelectedCountry: PropTypes.func.isRequired,
   handleFetchCountries: PropTypes.func.isRequired,
+  onFetchCountryData: PropTypes.func.isRequired,
+  data: PropTypes.arrayOf(
+    PropTypes.shape({
+      Country: PropTypes.string,
+      Province: PropTypes.string,
+      Lat: PropTypes.number,
+      Lon: PropTypes.number,
+      Date: PropTypes.string,
+      Cases: PropTypes.number,
+      Status: PropTypes.string,
+    }),
+  ),
 };
 
 const mapStateToProps = createSelector(
-  [makeSelectCountry(), makeAvailableCountries()],
-  (selectedCountry, availableCountries) => ({
+  [makeSelectCountry(), makeAvailableCountries(), makeMappedCountryData()],
+  (selectedCountry, availableCountries, data) => ({
     selectedCountry,
     availableCountries,
+    data,
   }),
 );
 
 const mapDispatchToProps = (dispatch) => ({
-  handleSetSelectedCountry: (selectedCountry) =>
+  onSetSelectedCountry: (selectedCountry) =>
     dispatch(setSelectedCountry(selectedCountry)),
   handleFetchCountries: () => dispatch(fetchCountries()),
+  onFetchCountryData: () => dispatch(fetchCountryData()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(homePage);
