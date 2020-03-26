@@ -1,0 +1,19 @@
+{
+  "name": "covid19dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hurrtz/covid19dashboard.git"
+  },
+  "author": "Tobias Winkler",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hurrtz/covid19dashboard/issues"
+  },
+  "homepage": "https://github.com/hurrtz/covid19dashboard#readme"
+}
