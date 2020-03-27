@@ -29,6 +29,12 @@ const makeSelectedCountryObject = () =>
 const makeData = () =>
   createSelector(selectApplication, (application) => application.data);
 
+const makeProvince = () =>
+  createSelector(
+    selectApplication,
+    (application) => application.selectedProvince,
+  );
+
 const makeCountryData = () =>
   createSelector(
     [makeSelectedCountryObject(), makeData()],
@@ -38,38 +44,60 @@ const makeCountryData = () =>
         : [],
   );
 
-const makeMappedCountryData = () =>
-  createSelector(makeCountryData(), (countryData) => {
-    const availableCategories = [];
+const makeCountryDataMappedForChart = () =>
+  createSelector(
+    [makeCountryData(), makeProvince()],
+    (_countryData, selectedProvince) => {
+      const countryData = { ..._countryData };
+      const availableCategories = [];
 
-    if (!countryData || !Object.keys(countryData).length) {
-      return undefined;
-    }
+      if (!countryData || !Object.keys(countryData).length) {
+        return undefined;
+      }
 
-    if (countryData.confirmed && countryData.confirmed.length) {
-      availableCategories.push('confirmed');
-    }
+      if (countryData.confirmed && countryData.confirmed.length) {
+        availableCategories.push('confirmed');
+      }
 
-    if (countryData.deaths && countryData.deaths.length) {
-      availableCategories.push('deaths');
-    }
+      if (countryData.deaths && countryData.deaths.length) {
+        availableCategories.push('deaths');
+      }
 
-    if (countryData.recovered && countryData.recovered.length) {
-      availableCategories.push('recovered');
-    }
+      if (countryData.recovered && countryData.recovered.length) {
+        availableCategories.push('recovered');
+      }
 
-    return countryData[availableCategories[0]].map((day, index) => {
-      const dayOut = {
-        name: moment(day.Date).format('l'),
-      };
+      if (selectedProvince) {
+        // return something province related
+      }
 
       availableCategories.forEach((category) => {
-        dayOut[category] = countryData[category][index].Cases;
+        const entriesByDate = {};
+
+        countryData[category].forEach((entry) => {
+          if (!entriesByDate[entry.Date]) {
+            entriesByDate[entry.Date] = { ...entry };
+          } else {
+            entriesByDate[entry.Date].Cases += entry.Cases;
+          }
+        });
+
+        countryData[category] = Object.values(entriesByDate);
       });
 
-      return dayOut;
-    });
-  });
+      return countryData[availableCategories[0]].map((day, index) => {
+        const dayOut = {
+          name: moment(day.Date).format('l'),
+        };
+
+        availableCategories.forEach((category) => {
+          dayOut[category] = countryData[category][index].Cases;
+        });
+
+        return dayOut;
+      });
+    },
+  );
 
 export {
   selectApplication,
@@ -77,5 +105,5 @@ export {
   makeAvailableCountries,
   makeSelectedCountryObject,
   makeCountryData,
-  makeMappedCountryData,
+  makeCountryDataMappedForChart,
 };

@@ -28,7 +28,7 @@ import { useInjectSaga } from 'utils/injectSaga';
 import {
   makeSelectCountry,
   makeAvailableCountries,
-  makeMappedCountryData,
+  makeCountryDataMappedForChart,
 } from './selectors';
 import {
   setSelectedCountry,
@@ -147,7 +147,11 @@ homePage.propTypes = {
 };
 
 const mapStateToProps = createSelector(
-  [makeSelectCountry(), makeAvailableCountries(), makeMappedCountryData()],
+  [
+    makeSelectCountry(),
+    makeAvailableCountries(),
+    makeCountryDataMappedForChart(),
+  ],
   (selectedCountry, availableCountries, data) => ({
     selectedCountry,
     availableCountries,
