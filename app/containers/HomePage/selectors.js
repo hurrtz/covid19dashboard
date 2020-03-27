@@ -11,6 +11,12 @@ const makeSelectCountry = () =>
     (application) => application.selectedCountry,
   );
 
+const makeSelectProvince = () =>
+  createSelector(
+    selectApplication,
+    (application) => application.selectedProvince,
+  );
+
 const makeAvailableCountries = () =>
   createSelector(
     selectApplication,
@@ -23,7 +29,13 @@ const makeSelectedCountryObject = () =>
     (selectedCountry, availableCountries) =>
       availableCountries.filter(
         (country) => country.Country === selectedCountry,
-      )[0] || undefined,
+      )[0] || {},
+  );
+
+const makeHasProvinces = () =>
+  createSelector(
+    makeSelectedCountryObject(),
+    (country) => country && country.Provinces && country.Provinces.length > 1,
   );
 
 const makeData = () =>
@@ -51,10 +63,6 @@ const makeCountryDataMappedForChart = () =>
       const countryData = { ..._countryData };
       const availableCategories = [];
 
-      if (!countryData || !Object.keys(countryData).length) {
-        return undefined;
-      }
-
       if (countryData.confirmed && countryData.confirmed.length) {
         availableCategories.push('confirmed');
       }
@@ -67,25 +75,26 @@ const makeCountryDataMappedForChart = () =>
         availableCategories.push('recovered');
       }
 
-      if (selectedProvince) {
-        // return something province related
-      }
-
       availableCategories.forEach((category) => {
         const entriesByDate = {};
 
         countryData[category].forEach((entry) => {
-          if (!entriesByDate[entry.Date]) {
-            entriesByDate[entry.Date] = { ...entry };
-          } else {
-            entriesByDate[entry.Date].Cases += entry.Cases;
+          if (
+            entry.Province === selectedProvince ||
+            selectedProvince === 'all'
+          ) {
+            if (!entriesByDate[entry.Date]) {
+              entriesByDate[entry.Date] = { ...entry };
+            } else {
+              entriesByDate[entry.Date].Cases += entry.Cases;
+            }
           }
         });
 
         countryData[category] = Object.values(entriesByDate);
       });
 
-      return countryData[availableCategories[0]].map((day, index) => {
+      return (countryData[availableCategories[0]] || []).map((day, index) => {
         const dayOut = {
           name: moment(day.Date).format('l'),
         };
@@ -102,8 +111,10 @@ const makeCountryDataMappedForChart = () =>
 export {
   selectApplication,
   makeSelectCountry,
+  makeSelectProvince,
   makeAvailableCountries,
   makeSelectedCountryObject,
   makeCountryData,
   makeCountryDataMappedForChart,
+  makeHasProvinces,
 };

@@ -26,12 +26,15 @@ import {
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
-  makeSelectCountry,
+  makeSelectProvince,
   makeAvailableCountries,
   makeCountryDataMappedForChart,
+  makeHasProvinces,
+  makeSelectedCountryObject,
 } from './selectors';
 import {
   setSelectedCountry,
+  setSelectedProvince,
   fetchCountries,
   fetchCountryData,
 } from './actions';
@@ -43,11 +46,14 @@ const key = 'APPLICATION';
 
 const homePage = ({
   selectedCountry,
+  selectedProvince,
   availableCountries,
   onSetSelectedCountry,
+  onSetSelectedProvince,
   handleFetchCountries,
   onFetchCountryData,
   data,
+  hasProvinces,
 }) => {
   const rootRef = useRef();
 
@@ -64,7 +70,9 @@ const homePage = ({
   }, []);
 
   useEffect(() => {
-    onFetchCountryData();
+    if (selectedCountry && selectedCountry.Country) {
+      onFetchCountryData();
+    }
   }, [selectedCountry]);
 
   return (
@@ -82,19 +90,43 @@ const homePage = ({
       </Grid>
       <Grid container direction="column" spacing={4}>
         <Grid item>
-          <FormControl>
-            <NativeSelect
-              value={selectedCountry}
-              onChange={(event) => onSetSelectedCountry(event.target.value)}
-            >
-              {availableCountries.map((country) => (
-                <option key={country.Country} value={country.Country}>
-                  {country.Country}
-                </option>
-              ))}
-            </NativeSelect>
-            <FormHelperText>select your country</FormHelperText>
-          </FormControl>
+          <Grid container spacing={4}>
+            <Grid item>
+              <FormControl>
+                <NativeSelect
+                  value={selectedCountry.Country}
+                  onChange={(event) => onSetSelectedCountry(event.target.value)}
+                >
+                  {availableCountries.map((country) => (
+                    <option key={country.Country} value={country.Country}>
+                      {country.Country}
+                    </option>
+                  ))}
+                </NativeSelect>
+                <FormHelperText>select your country</FormHelperText>
+              </FormControl>
+            </Grid>
+            {hasProvinces && (
+              <Grid item>
+                <FormControl>
+                  <NativeSelect
+                    value={selectedProvince}
+                    onChange={(event) =>
+                      onSetSelectedProvince(event.target.value)
+                    }
+                  >
+                    <option value="all">all</option>
+                    {selectedCountry.Provinces.map((province) => (
+                      <option key={province} value={province}>
+                        {province}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                  <FormHelperText>select your province</FormHelperText>
+                </FormControl>
+              </Grid>
+            )}
+          </Grid>
         </Grid>
         <Grid item>
           {data && (
@@ -122,7 +154,16 @@ const homePage = ({
 };
 
 homePage.propTypes = {
-  selectedCountry: PropTypes.string.isRequired,
+  selectedCountry: PropTypes.PropTypes.shape({
+    Country: PropTypes.string,
+    Provinces: PropTypes.arrayOf(PropTypes.string),
+    Lat: PropTypes.number,
+    Lon: PropTypes.number,
+    Date: PropTypes.string,
+    Cases: PropTypes.number,
+    Status: PropTypes.string,
+  }).isRequired,
+  selectedProvince: PropTypes.string.isRequired,
   availableCountries: PropTypes.arrayOf(
     PropTypes.shape({
       Country: PropTypes.string,
@@ -131,8 +172,10 @@ homePage.propTypes = {
     }),
   ),
   onSetSelectedCountry: PropTypes.func.isRequired,
+  onSetSelectedProvince: PropTypes.func.isRequired,
   handleFetchCountries: PropTypes.func.isRequired,
   onFetchCountryData: PropTypes.func.isRequired,
+  hasProvinces: PropTypes.bool.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       Country: PropTypes.string,
@@ -148,13 +191,23 @@ homePage.propTypes = {
 
 const mapStateToProps = createSelector(
   [
-    makeSelectCountry(),
+    makeSelectedCountryObject(),
+    makeSelectProvince(),
     makeAvailableCountries(),
+    makeHasProvinces(),
     makeCountryDataMappedForChart(),
   ],
-  (selectedCountry, availableCountries, data) => ({
+  (
     selectedCountry,
+    selectedProvince,
     availableCountries,
+    hasProvinces,
+    data,
+  ) => ({
+    selectedCountry,
+    selectedProvince,
+    availableCountries,
+    hasProvinces,
     data,
   }),
 );
@@ -162,6 +215,8 @@ const mapStateToProps = createSelector(
 const mapDispatchToProps = (dispatch) => ({
   onSetSelectedCountry: (selectedCountry) =>
     dispatch(setSelectedCountry(selectedCountry)),
+  onSetSelectedProvince: (selectedProvince) =>
+    dispatch(setSelectedProvince(selectedProvince)),
   handleFetchCountries: () => dispatch(fetchCountries()),
   onFetchCountryData: () => dispatch(fetchCountryData()),
 });

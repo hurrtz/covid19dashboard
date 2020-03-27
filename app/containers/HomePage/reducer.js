@@ -5,11 +5,14 @@ import {
   SET_SELECTED_COUNTRY,
   SET_AVAILABLE_COUNTRIES,
   SET_COUNTRY_DATA,
+  SET_SELECTED_PROVINCE,
 } from './constants';
+
+const DEFAULT_PROVINCE = 'all';
 
 export const initialState = {
   selectedCountry: '',
-  selectedProvince: '',
+  selectedProvince: DEFAULT_PROVINCE,
   availableCountries: [],
   data: {},
 };
@@ -19,6 +22,11 @@ const applicationReducer = (state = initialState, action) =>
     switch (action.type) {
       case SET_SELECTED_COUNTRY:
         draft.selectedCountry = action.payload;
+        draft.selectedProvince = DEFAULT_PROVINCE;
+        break;
+
+      case SET_SELECTED_PROVINCE:
+        draft.selectedProvince = action.payload;
         break;
 
       case SET_AVAILABLE_COUNTRIES:
