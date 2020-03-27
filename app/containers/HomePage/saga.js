@@ -20,11 +20,23 @@ export function* fetchCountryData() {
   const selectedCountry = yield select(makeSelectedCountryObject());
 
   if (selectedCountry) {
-    const countryData = yield axios.get(
+    const countryDataConfirmed = yield axios.get(
       `${API}/country/${selectedCountry.Slug}/status/confirmed`,
     );
 
-    yield put(setCountryData(countryData.data));
+    yield put(setCountryData('confirmed', countryDataConfirmed.data));
+
+    const countryDataRecovered = yield axios.get(
+      `${API}/country/${selectedCountry.Slug}/status/recovered`,
+    );
+
+    yield put(setCountryData('recovered', countryDataRecovered.data));
+
+    const countryDataDeaths = yield axios.get(
+      `${API}/country/${selectedCountry.Slug}/status/deaths`,
+    );
+
+    yield put(setCountryData('deaths', countryDataDeaths.data));
   }
 }
 

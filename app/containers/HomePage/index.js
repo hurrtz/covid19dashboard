@@ -11,7 +11,14 @@ import {
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
-import { LineChart, XAxis, YAxis, CartesianGrid, Line } from 'recharts';
+import {
+  LineChart,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Line,
+  Tooltip,
+} from 'recharts';
 
 import { useInjectSaga } from 'utils/injectSaga';
 
@@ -81,8 +88,11 @@ const homePage = ({
             <LineChart width={500} height={300} data={data}>
               <XAxis dataKey="name" />
               <YAxis />
+              <Tooltip />
               <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-              <Line type="monotone" dataKey="confirmed" stroke="#8884d8" />
+              <Line type="monotone" dataKey="confirmed" stroke="#009" />
+              <Line type="monotone" dataKey="recovered" stroke="#090" />
+              <Line type="monotone" dataKey="deaths" stroke="#900" />
             </LineChart>
           )}
         </Grid>

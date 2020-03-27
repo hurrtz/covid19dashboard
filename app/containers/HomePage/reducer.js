@@ -25,7 +25,12 @@ const applicationReducer = (state = initialState, action) =>
         break;
 
       case SET_COUNTRY_DATA:
-        draft.data[state.selectedCountry] = action.payload;
+        if (!draft.data[state.selectedCountry]) {
+          draft.data[state.selectedCountry] = {};
+        }
+
+        draft.data[state.selectedCountry][action.payload.category] =
+          action.payload.data;
         break;
 
       default:

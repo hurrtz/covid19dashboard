@@ -20,7 +20,7 @@ export const setAvailableCountries = (countries) => ({
 
 export const fetchCountryData = () => ({ type: FETCH_COUNTRY_DATA });
 
-export const setCountryData = (countryData) => ({
+export const setCountryData = (category, data) => ({
   type: SET_COUNTRY_DATA,
-  payload: countryData,
+  payload: { category, data },
 });
