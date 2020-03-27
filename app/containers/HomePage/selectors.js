@@ -1,20 +1,26 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
 
-import { initialState } from './reducer';
+import { initialState, DEFAULT_PROVINCE } from './reducer';
 
 const selectApplication = (state) => state.application || initialState;
 
-const makeSelectCountry = () =>
+const makeSelectedCountry = () =>
   createSelector(
     selectApplication,
     (application) => application.selectedCountry,
   );
 
-const makeSelectProvince = () =>
+const makeSelectedProvince = () =>
   createSelector(
     selectApplication,
     (application) => application.selectedProvince,
+  );
+
+const makeSelectedChartType = () =>
+  createSelector(
+    selectApplication,
+    (application) => application.selectedChartType,
   );
 
 const makeAvailableCountries = () =>
@@ -25,7 +31,7 @@ const makeAvailableCountries = () =>
 
 const makeSelectedCountryObject = () =>
   createSelector(
-    [makeSelectCountry(), makeAvailableCountries()],
+    [makeSelectedCountry(), makeAvailableCountries()],
     (selectedCountry, availableCountries) =>
       availableCountries.filter(
         (country) => country.Country === selectedCountry,
@@ -81,7 +87,7 @@ const makeCountryDataMappedForChart = () =>
         countryData[category].forEach((entry) => {
           if (
             entry.Province === selectedProvince ||
-            selectedProvince === 'all'
+            selectedProvince === DEFAULT_PROVINCE
           ) {
             if (!entriesByDate[entry.Date]) {
               entriesByDate[entry.Date] = { ...entry };
@@ -110,8 +116,9 @@ const makeCountryDataMappedForChart = () =>
 
 export {
   selectApplication,
-  makeSelectCountry,
-  makeSelectProvince,
+  makeSelectedCountry,
+  makeSelectedProvince,
+  makeSelectedChartType,
   makeAvailableCountries,
   makeSelectedCountryObject,
   makeCountryData,

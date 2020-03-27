@@ -16,7 +16,8 @@ import LineChart from 'components/Charts/Line';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
-  makeSelectProvince,
+  makeSelectedProvince,
+  makeSelectedChartType,
   makeAvailableCountries,
   makeCountryDataMappedForChart,
   makeHasProvinces,
@@ -27,6 +28,7 @@ import {
   setSelectedProvince,
   fetchCountries,
   fetchCountryData,
+  setChartType,
 } from './actions';
 import saga from './saga';
 
@@ -35,11 +37,13 @@ const key = 'APPLICATION';
 const homePage = ({
   selectedCountry,
   selectedProvince,
+  selectedChartType,
   availableCountries,
   onSetSelectedCountry,
   onSetSelectedProvince,
   handleFetchCountries,
   onFetchCountryData,
+  onSetChartType,
   data,
   hasProvinces,
 }) => {
@@ -65,7 +69,10 @@ const homePage = ({
 
   return (
     <RootRef rootRef={rootRef}>
-      <Header />
+      <Header
+        chartType={selectedChartType}
+        handleChangeChartType={onSetChartType}
+      />
       <Grid container spacing={4}>
         <Grid item />
       </Grid>
@@ -132,6 +139,7 @@ homePage.propTypes = {
     Status: PropTypes.string,
   }).isRequired,
   selectedProvince: PropTypes.string.isRequired,
+  selectedChartType: PropTypes.string.isRequired,
   availableCountries: PropTypes.arrayOf(
     PropTypes.shape({
       Country: PropTypes.string,
@@ -143,6 +151,7 @@ homePage.propTypes = {
   onSetSelectedProvince: PropTypes.func.isRequired,
   handleFetchCountries: PropTypes.func.isRequired,
   onFetchCountryData: PropTypes.func.isRequired,
+  onSetChartType: PropTypes.func.isRequired,
   hasProvinces: PropTypes.bool.isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
@@ -160,7 +169,8 @@ homePage.propTypes = {
 const mapStateToProps = createSelector(
   [
     makeSelectedCountryObject(),
-    makeSelectProvince(),
+    makeSelectedProvince(),
+    makeSelectedChartType(),
     makeAvailableCountries(),
     makeHasProvinces(),
     makeCountryDataMappedForChart(),
@@ -168,12 +178,14 @@ const mapStateToProps = createSelector(
   (
     selectedCountry,
     selectedProvince,
+    selectedChartType,
     availableCountries,
     hasProvinces,
     data,
   ) => ({
     selectedCountry,
     selectedProvince,
+    selectedChartType,
     availableCountries,
     hasProvinces,
     data,
@@ -185,6 +197,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSelectedCountry(selectedCountry)),
   onSetSelectedProvince: (selectedProvince) =>
     dispatch(setSelectedProvince(selectedProvince)),
+  onSetChartType: (chartType) => dispatch(setChartType(chartType)),
   handleFetchCountries: () => dispatch(fetchCountries()),
   onFetchCountryData: () => dispatch(fetchCountryData()),
 });

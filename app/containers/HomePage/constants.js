@@ -5,6 +5,10 @@ export const FETCH_COUNTRIES = 'FETCH_COUNTRIES';
 export const SET_AVAILABLE_COUNTRIES = 'SET_AVAILABLE_COUNTRIES';
 export const FETCH_COUNTRY_DATA = 'FETCH_COUNTRY_DATA';
 export const SET_COUNTRY_DATA = 'SET_COUNTRY_DATA';
+export const SET_CHART_TYPE = 'SET_CHART_TYPE';
+
+export const CHART_TYPE_LINE_CHART = 'LINE_CHART';
+export const CHART_TYPE_MAP_CHART = 'MAP_CHART';
 
 export const API = 'https://api.covid19api.com';
 export const FETCH_COUNTRIES_URL = `${API}/countries`;

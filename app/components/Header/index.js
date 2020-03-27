@@ -1,54 +1,56 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Typography, AppBar, Toolbar } from '@material-ui/core';
+import {
+  Typography,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Grid,
+} from '@material-ui/core';
+import {
+  Timeline as LineChartIcon,
+  Public as MapChartIcon,
+} from '@material-ui/icons';
 import PropTypes from 'prop-types';
 
+import {
+  CHART_TYPE_LINE_CHART,
+  CHART_TYPE_MAP_CHART,
+} from 'containers/HomePage/constants';
 import messages from './messages';
 
-const Header = () => (
+const Header = ({ chartType, handleChangeChartType }) => (
   <AppBar position="static" color="transparent">
     <Toolbar>
-      <Typography variant="h6">
-        <FormattedMessage {...messages.header} /> <span>&mdash;</span> Dashboard
-      </Typography>
+      <Grid container justify="space-between" alignItems="center">
+        <Grid item>
+          <Typography variant="h6">
+            <FormattedMessage {...messages.header} /> <span>&mdash;</span>{' '}
+            Dashboard
+          </Typography>
+        </Grid>
+        <Grid item>
+          <IconButton
+            color={chartType === CHART_TYPE_LINE_CHART ? 'primary' : 'default'}
+            onClick={() => handleChangeChartType(CHART_TYPE_LINE_CHART)}
+          >
+            <LineChartIcon />
+          </IconButton>
+          <IconButton
+            color={chartType === CHART_TYPE_MAP_CHART ? 'primary' : 'default'}
+            onClick={() => handleChangeChartType(CHART_TYPE_MAP_CHART)}
+          >
+            <MapChartIcon />
+          </IconButton>
+        </Grid>
+      </Grid>
     </Toolbar>
   </AppBar>
 );
 
 Header.propTypes = {
-  selectedCountry: PropTypes.PropTypes.shape({
-    Country: PropTypes.string,
-    Provinces: PropTypes.arrayOf(PropTypes.string),
-    Lat: PropTypes.number,
-    Lon: PropTypes.number,
-    Date: PropTypes.string,
-    Cases: PropTypes.number,
-    Status: PropTypes.string,
-  }).isRequired,
-  selectedProvince: PropTypes.string.isRequired,
-  availableCountries: PropTypes.arrayOf(
-    PropTypes.shape({
-      Country: PropTypes.string,
-      Slug: PropTypes.string,
-      Provinces: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  onSetSelectedCountry: PropTypes.func.isRequired,
-  onSetSelectedProvince: PropTypes.func.isRequired,
-  handleFetchCountries: PropTypes.func.isRequired,
-  onFetchCountryData: PropTypes.func.isRequired,
-  hasProvinces: PropTypes.bool.isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      Country: PropTypes.string,
-      Province: PropTypes.string,
-      Lat: PropTypes.number,
-      Lon: PropTypes.number,
-      Date: PropTypes.string,
-      Cases: PropTypes.number,
-      Status: PropTypes.string,
-    }),
-  ),
+  chartType: PropTypes.string.isRequired,
+  handleChangeChartType: PropTypes.func.isRequired,
 };
 
 export default Header;

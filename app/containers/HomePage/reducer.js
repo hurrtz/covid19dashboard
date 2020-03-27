@@ -6,11 +6,15 @@ import {
   SET_AVAILABLE_COUNTRIES,
   SET_COUNTRY_DATA,
   SET_SELECTED_PROVINCE,
+  SET_CHART_TYPE,
+  CHART_TYPE_LINE_CHART,
 } from './constants';
 
-const DEFAULT_PROVINCE = 'all';
+export const DEFAULT_PROVINCE = 'ALL';
+export const DEFAULT_CHART_TYPE = CHART_TYPE_LINE_CHART;
 
 export const initialState = {
+  selectedChartType: DEFAULT_CHART_TYPE,
   selectedCountry: '',
   selectedProvince: DEFAULT_PROVINCE,
   availableCountries: [],
@@ -27,6 +31,10 @@ const applicationReducer = (state = initialState, action) =>
 
       case SET_SELECTED_PROVINCE:
         draft.selectedProvince = action.payload;
+        break;
+
+      case SET_CHART_TYPE:
+        draft.selectedChartType = action.payload;
         break;
 
       case SET_AVAILABLE_COUNTRIES:

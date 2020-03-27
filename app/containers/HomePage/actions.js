@@ -5,6 +5,7 @@ import {
   SET_AVAILABLE_COUNTRIES,
   SET_COUNTRY_DATA,
   FETCH_COUNTRY_DATA,
+  SET_CHART_TYPE,
 } from './constants';
 
 export const setSelectedCountry = (country) => ({
@@ -29,4 +30,9 @@ export const fetchCountryData = () => ({ type: FETCH_COUNTRY_DATA });
 export const setCountryData = (category, data) => ({
   type: SET_COUNTRY_DATA,
   payload: { category, data },
+});
+
+export const setChartType = (chartType) => ({
+  type: SET_CHART_TYPE,
+  payload: chartType,
 });
