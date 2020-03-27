@@ -21,6 +21,7 @@ export default function App() {
     <Container>
       <Switch>
         <Route exact path="/" component={HomePage} />
+        <Route exact path="/covid19dashboard" component={HomePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
