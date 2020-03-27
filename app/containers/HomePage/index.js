@@ -10,16 +10,9 @@ import {
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
-import {
-  LineChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Line,
-  Tooltip,
-} from 'recharts';
 
 import Header from 'components/Header';
+import LineChart from 'components/Charts/Line';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
@@ -119,20 +112,7 @@ const homePage = ({
         {data && (
           <Grid item>
             <Paper elevation={3}>
-              <LineChart
-                width={width}
-                height={height}
-                data={data}
-                margin={{ top: 25, right: 25, left: 0, bottom: 10 }}
-              >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <Tooltip />
-                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-                <Line type="monotone" dataKey="confirmed" stroke="#009" />
-                <Line type="monotone" dataKey="recovered" stroke="#090" />
-                <Line type="monotone" dataKey="deaths" stroke="#900" />
-              </LineChart>
+              <LineChart width={width} height={height} data={data} />
             </Paper>
           </Grid>
         )}
