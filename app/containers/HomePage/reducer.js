@@ -9,6 +9,7 @@ import {
 
 export const initialState = {
   selectedCountry: '',
+  selectedProvince: '',
   availableCountries: [],
   data: {},
 };

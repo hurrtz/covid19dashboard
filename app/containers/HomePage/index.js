@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   Grid,
   Typography,
-  Divider,
   FormControl,
   NativeSelect,
   FormHelperText,
+  RootRef,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -46,10 +46,18 @@ const homePage = ({
   onFetchCountryData,
   data,
 }) => {
+  const rootRef = useRef();
+
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+
   useInjectSaga({ key, saga });
 
   useEffect(() => {
     handleFetchCountries();
+
+    setWidth(rootRef.current.clientWidth);
+    setHeight(rootRef.current.parentNode.parentNode.clientHeight - 104 - 86);
   }, []);
 
   useEffect(() => {
@@ -57,17 +65,18 @@ const homePage = ({
   }, [selectedCountry]);
 
   return (
-    <Grid container direction="column">
-      <Grid item>
-        <Typography variant="h2">
-          <FormattedMessage {...messages.header} />
-        </Typography>
+    <RootRef rootRef={rootRef}>
+      <Grid container alignItems="center" spacing={4}>
+        <Grid item>
+          <Typography variant="h2">
+            <FormattedMessage {...messages.header} />
+          </Typography>
+        </Grid>
+        <Grid item>
+          <Typography variant="h3">&mdash; Dashboard</Typography>
+        </Grid>
       </Grid>
-      <Grid item>
-        <Typography variant="h3">Dashboard</Typography>
-      </Grid>
-      <Divider />
-      <Grid container>
+      <Grid container direction="column" spacing={4}>
         <Grid item>
           <FormControl>
             <NativeSelect
@@ -85,7 +94,7 @@ const homePage = ({
         </Grid>
         <Grid item>
           {data && (
-            <LineChart width={500} height={300} data={data}>
+            <LineChart width={width} height={height} data={data}>
               <XAxis dataKey="name" />
               <YAxis />
               <Tooltip />
@@ -97,7 +106,7 @@ const homePage = ({
           )}
         </Grid>
       </Grid>
-    </Grid>
+    </RootRef>
   );
 };
 
