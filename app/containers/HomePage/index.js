@@ -1,15 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FormattedMessage } from 'react-intl';
 import {
   Grid,
-  Typography,
   FormControl,
   NativeSelect,
   FormHelperText,
   RootRef,
   Paper,
-  AppBar,
-  Toolbar,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -23,6 +19,7 @@ import {
   Tooltip,
 } from 'recharts';
 
+import Header from 'components/Header';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
@@ -39,8 +36,6 @@ import {
   fetchCountryData,
 } from './actions';
 import saga from './saga';
-
-import messages from './messages';
 
 const key = 'APPLICATION';
 
@@ -77,14 +72,7 @@ const homePage = ({
 
   return (
     <RootRef rootRef={rootRef}>
-      <AppBar position="static" color="transparent">
-        <Toolbar>
-          <Typography variant="h6">
-            <FormattedMessage {...messages.header} /> <span>&mdash;</span>{' '}
-            Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header />
       <Grid container spacing={4}>
         <Grid item />
       </Grid>
@@ -128,8 +116,8 @@ const homePage = ({
             )}
           </Grid>
         </Grid>
-        <Grid item>
-          {data && (
+        {data && (
+          <Grid item>
             <Paper elevation={3}>
               <LineChart
                 width={width}
@@ -146,8 +134,8 @@ const homePage = ({
                 <Line type="monotone" dataKey="deaths" stroke="#900" />
               </LineChart>
             </Paper>
-          )}
-        </Grid>
+          </Grid>
+        )}
       </Grid>
     </RootRef>
   );
