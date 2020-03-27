@@ -7,6 +7,9 @@ import {
   NativeSelect,
   FormHelperText,
   RootRef,
+  Paper,
+  AppBar,
+  Toolbar,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -66,15 +69,16 @@ const homePage = ({
 
   return (
     <RootRef rootRef={rootRef}>
-      <Grid container alignItems="center" spacing={4}>
-        <Grid item>
-          <Typography variant="h2">
-            <FormattedMessage {...messages.header} />
+      <AppBar position="static" color="transparent">
+        <Toolbar>
+          <Typography variant="h6">
+            <FormattedMessage {...messages.header} /> <span>&mdash;</span>{' '}
+            Dashboard
           </Typography>
-        </Grid>
-        <Grid item>
-          <Typography variant="h3">&mdash; Dashboard</Typography>
-        </Grid>
+        </Toolbar>
+      </AppBar>
+      <Grid container spacing={4}>
+        <Grid item />
       </Grid>
       <Grid container direction="column" spacing={4}>
         <Grid item>
@@ -94,15 +98,22 @@ const homePage = ({
         </Grid>
         <Grid item>
           {data && (
-            <LineChart width={width} height={height} data={data}>
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-              <Line type="monotone" dataKey="confirmed" stroke="#009" />
-              <Line type="monotone" dataKey="recovered" stroke="#090" />
-              <Line type="monotone" dataKey="deaths" stroke="#900" />
-            </LineChart>
+            <Paper elevation={3}>
+              <LineChart
+                width={width}
+                height={height}
+                data={data}
+                margin={{ top: 25, right: 25, left: 0, bottom: 10 }}
+              >
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip />
+                <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
+                <Line type="monotone" dataKey="confirmed" stroke="#009" />
+                <Line type="monotone" dataKey="recovered" stroke="#090" />
+                <Line type="monotone" dataKey="deaths" stroke="#900" />
+              </LineChart>
+            </Paper>
           )}
         </Grid>
       </Grid>
