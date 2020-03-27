@@ -42,8 +42,6 @@ const makeMappedCountryData = () =>
   createSelector(makeCountryData(), (countryData) => {
     const availableCategories = [];
 
-    console.log(countryData);
-
     if (!countryData || !Object.keys(countryData).length) {
       return undefined;
     }
