@@ -5,7 +5,6 @@ import {
   NativeSelect,
   FormHelperText,
   RootRef,
-  Paper,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
@@ -31,6 +30,7 @@ import {
   setChartType,
 } from './actions';
 import saga from './saga';
+import { StyledPaper } from './styles';
 
 const key = 'APPLICATION';
 
@@ -118,9 +118,9 @@ const homePage = ({
         </Grid>
         {data && (
           <Grid item>
-            <Paper elevation={3}>
+            <StyledPaper elevation={3}>
               <LineChart width={width} height={height} data={data} />
-            </Paper>
+            </StyledPaper>
           </Grid>
         )}
       </Grid>
