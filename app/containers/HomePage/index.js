@@ -1,9 +1,11 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Grid, RootRef } from '@material-ui/core';
+import React, { useEffect, Fragment } from 'react';
+import { Grid } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
+import { flow } from 'lodash';
 
+import { Consumer as hasApplicationConsumer } from 'contexts/Application';
 import Header from 'components/Header';
 import LineChart from 'components/Charts/Line';
 import ChartSettings from 'containers/Chart/Settings';
@@ -35,6 +37,7 @@ import { StyledPaper, StyledHeadline, SettingsWrapper } from './styles';
 const key = 'APPLICATION';
 
 const homePage = ({
+  dimensions: { width, height },
   selectedCountry,
   selectedProvince,
   selectedCity,
@@ -45,18 +48,10 @@ const homePage = ({
   cities,
   data,
 }) => {
-  const rootRef = useRef();
-
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
   useInjectSaga({ key, saga });
 
   useEffect(() => {
     handleFetchCountries();
-
-    setWidth(rootRef.current.clientWidth);
-    setHeight(rootRef.current.parentNode.parentNode.clientHeight - 104 - 86);
   }, []);
 
   useEffect(() => {
@@ -64,6 +59,10 @@ const homePage = ({
       onFetchCountryData();
     }
   }, [selectedCountry]);
+
+  const getHeight = () => height - 104 - 86;
+
+  const getWidth = () => width - 48;
 
   const renderChart = () => (
     <StyledPaper>
@@ -73,7 +72,7 @@ const homePage = ({
         city={(cities.filter((city) => city.id === selectedCity)[0] || {}).name}
       />
 
-      <LineChart width={width} height={height} data={data} />
+      <LineChart width={getWidth()} height={getHeight()} data={data} />
 
       <SettingsWrapper>
         <ChartSettings />
@@ -82,7 +81,7 @@ const homePage = ({
   );
 
   return (
-    <RootRef rootRef={rootRef}>
+    <Fragment>
       <Header
         chartType={selectedChartType}
         handleChangeChartType={onSetChartType}
@@ -93,7 +92,7 @@ const homePage = ({
       <Grid container direction="column" spacing={4}>
         {data && <Grid item>{renderChart()}</Grid>}
       </Grid>
-    </RootRef>
+    </Fragment>
   );
 };
 
@@ -127,6 +126,10 @@ homePage.propTypes = {
       Status: PropTypes.string,
     }),
   ),
+  dimensions: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number,
+  }).isRequired,
 };
 
 const mapStateToProps = createSelector(
@@ -178,4 +181,7 @@ const mapDispatchToProps = (dispatch) => ({
   onFetchCountryData: () => dispatch(fetchCountryData()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(homePage);
+export default flow([
+  connect(mapStateToProps, mapDispatchToProps),
+  hasApplicationConsumer,
+])(homePage);
