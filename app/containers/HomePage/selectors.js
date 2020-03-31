@@ -22,7 +22,7 @@ const makeSelectedChartType = () =>
 const makeAvailableCountries = () =>
   createSelector(
     selectApplication,
-    (application) => application.availableCountries,
+    (application) => application.availableCountries || [],
   );
 
 const makeSelectedCountryObject = () =>
@@ -36,14 +36,14 @@ const makeSelectedCountryObject = () =>
 
 const makeProvinces = () =>
   createSelector(makeSelectedCountryObject(), (country) =>
-    country.Provinces.filter(
-      (province) => province && province.indexOf(',') <= 0,
-    ).sort(),
+    (country.Provinces || [])
+      .filter((province) => province && province.indexOf(',') <= 0)
+      .sort(),
   );
 
 const makeAllProvinces = () =>
   createSelector(makeSelectedCountryObject(), (country) =>
-    [...country.Provinces].sort(),
+    [...(country.Provinces || [])].sort(),
   );
 
 const makeHasProvinces = () =>
