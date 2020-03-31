@@ -12,7 +12,7 @@ import { setAvailableCountries, setCountryData } from './actions';
 import { makeSelectedCountryObject, makeAvailableCountries } from './selectors';
 
 export function* fetchCountries() {
-  if (!(yield select(makeAvailableCountries()))) {
+  if (!(yield select(makeAvailableCountries())).length) {
     const countries = yield axios.get(FETCH_COUNTRIES_URL);
 
     store.set('countries', countries.data);
