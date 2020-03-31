@@ -66,7 +66,7 @@ const homePage = ({
   }, [selectedCountry]);
 
   const renderChart = () => (
-    <StyledPaper elevation={3}>
+    <StyledPaper>
       <StyledHeadline
         country={selectedCountry.Country}
         province={selectedProvince}

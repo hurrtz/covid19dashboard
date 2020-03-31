@@ -43,6 +43,7 @@ const Header = ({ chartType, handleChangeChartType }) => (
           </Tooltip>
           <Tooltip title="World Map">
             <IconButton
+              disabled
               color={chartType === CHART_TYPE_MAP_CHART ? 'primary' : 'default'}
               onClick={() => handleChangeChartType(CHART_TYPE_MAP_CHART)}
             >
