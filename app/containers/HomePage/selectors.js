@@ -36,7 +36,9 @@ const makeSelectedCountryObject = () =>
 
 const makeProvinces = () =>
   createSelector(makeSelectedCountryObject(), (country) =>
-    country.Provinces.filter((province) => province.indexOf(',') <= 0).sort(),
+    country.Provinces.filter(
+      (province) => province && province.indexOf(',') <= 0,
+    ).sort(),
   );
 
 const makeAllProvinces = () =>
@@ -47,7 +49,7 @@ const makeAllProvinces = () =>
 const makeHasProvinces = () =>
   createSelector(
     makeProvinces(),
-    (provinces) => provinces && provinces.length > 1,
+    (provinces) => provinces && provinces.length > 0,
   );
 
 const makeData = () =>
