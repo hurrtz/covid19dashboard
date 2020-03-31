@@ -36,7 +36,7 @@ import {
 } from './actions';
 import saga from './saga';
 import { DEFAULT_CITY, DEFAULT_PROVINCE } from './constants';
-import { StyledPaper } from './styles';
+import { StyledPaper, StyledHeadline } from './styles';
 
 const key = 'APPLICATION';
 
@@ -148,6 +148,12 @@ const homePage = ({
         {data && (
           <Grid item>
             <StyledPaper elevation={3}>
+              <StyledHeadline
+                country={selectedCountry.Country}
+                province={selectedProvince}
+                city={cities.filter((city) => city.id === selectedCity)[0].name}
+              />
+
               <LineChart width={width} height={height} data={data} />
             </StyledPaper>
           </Grid>

@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from 'recharts';
 import { Fab } from '@material-ui/core';
-import { MoreVert as MoreIcon } from '@material-ui/icons';
+import { Settings as SettingsIcon } from '@material-ui/icons';
 
 import { FabWrapper } from './styles';
 
@@ -31,7 +31,7 @@ const LineChart = ({ width, height, data }) => (
     </RechartLineChart>
     <FabWrapper>
       <Fab color="primary" size="medium">
-        <MoreIcon fontSize="small" />
+        <SettingsIcon fontSize="small" />
       </Fab>
     </FabWrapper>
   </Fragment>
