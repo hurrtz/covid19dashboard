@@ -1,17 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
-import {
-  Grid,
-  FormControl,
-  NativeSelect,
-  FormHelperText,
-  RootRef,
-} from '@material-ui/core';
+import { Grid, RootRef } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
 
 import Header from 'components/Header';
 import LineChart from 'components/Charts/Line';
+import ChartSettings from 'containers/Chart/Settings';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
@@ -35,8 +30,7 @@ import {
   setChartType,
 } from './actions';
 import saga from './saga';
-import { DEFAULT_CITY, DEFAULT_PROVINCE } from './constants';
-import { StyledPaper, StyledHeadline } from './styles';
+import { StyledPaper, StyledHeadline, SettingsWrapper } from './styles';
 
 const key = 'APPLICATION';
 
@@ -45,18 +39,11 @@ const homePage = ({
   selectedProvince,
   selectedCity,
   selectedChartType,
-  availableCountries,
-  onSetSelectedCountry,
-  onSetSelectedProvince,
-  onSetSelectedCity,
   handleFetchCountries,
   onFetchCountryData,
   onSetChartType,
-  data,
-  provinces,
-  hasProvinces,
   cities,
-  hasCities,
+  data,
 }) => {
   const rootRef = useRef();
 
@@ -78,6 +65,22 @@ const homePage = ({
     }
   }, [selectedCountry]);
 
+  const renderChart = () => (
+    <StyledPaper elevation={3}>
+      <StyledHeadline
+        country={selectedCountry.Country}
+        province={selectedProvince}
+        city={(cities.filter((city) => city.id === selectedCity)[0] || {}).name}
+      />
+
+      <LineChart width={width} height={height} data={data} />
+
+      <SettingsWrapper>
+        <ChartSettings />
+      </SettingsWrapper>
+    </StyledPaper>
+  );
+
   return (
     <RootRef rootRef={rootRef}>
       <Header
@@ -88,76 +91,7 @@ const homePage = ({
         <Grid item />
       </Grid>
       <Grid container direction="column" spacing={4}>
-        <Grid item>
-          <Grid container spacing={4}>
-            <Grid item>
-              <FormControl>
-                <NativeSelect
-                  value={selectedCountry.Country}
-                  onChange={(event) => onSetSelectedCountry(event.target.value)}
-                >
-                  {availableCountries.map((country) => (
-                    <option key={country.Country} value={country.Country}>
-                      {country.Country}
-                    </option>
-                  ))}
-                </NativeSelect>
-                <FormHelperText>Country</FormHelperText>
-              </FormControl>
-            </Grid>
-            {hasProvinces && (
-              <Grid item>
-                <FormControl>
-                  <NativeSelect
-                    value={selectedProvince}
-                    onChange={(event) =>
-                      onSetSelectedProvince(event.target.value)
-                    }
-                  >
-                    <option value={DEFAULT_PROVINCE}>all</option>
-                    {provinces.map((province) => (
-                      <option key={province} value={province}>
-                        {province}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                  <FormHelperText>Province</FormHelperText>
-                </FormControl>
-              </Grid>
-            )}
-            {hasCities && (
-              <Grid item>
-                <FormControl>
-                  <NativeSelect
-                    value={selectedCity}
-                    onChange={(event) => onSetSelectedCity(event.target.value)}
-                  >
-                    <option value={DEFAULT_CITY}>all</option>
-                    {cities.map((city) => (
-                      <option key={city.id} value={city.id}>
-                        {city.name}
-                      </option>
-                    ))}
-                  </NativeSelect>
-                  <FormHelperText>City</FormHelperText>
-                </FormControl>
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
-        {data && (
-          <Grid item>
-            <StyledPaper elevation={3}>
-              <StyledHeadline
-                country={selectedCountry.Country}
-                province={selectedProvince}
-                city={cities.filter((city) => city.id === selectedCity)[0].name}
-              />
-
-              <LineChart width={width} height={height} data={data} />
-            </StyledPaper>
-          </Grid>
-        )}
+        {data && <Grid item>{renderChart()}</Grid>}
       </Grid>
     </RootRef>
   );
@@ -176,23 +110,12 @@ homePage.propTypes = {
   selectedProvince: PropTypes.string.isRequired,
   selectedCity: PropTypes.string.isRequired,
   selectedChartType: PropTypes.string.isRequired,
-  availableCountries: PropTypes.arrayOf(
-    PropTypes.shape({
-      Country: PropTypes.string,
-      Slug: PropTypes.string,
-      Provinces: PropTypes.arrayOf(PropTypes.string),
-    }),
-  ),
-  onSetSelectedCountry: PropTypes.func.isRequired,
-  onSetSelectedProvince: PropTypes.func.isRequired,
-  onSetSelectedCity: PropTypes.func.isRequired,
   handleFetchCountries: PropTypes.func.isRequired,
   onFetchCountryData: PropTypes.func.isRequired,
   onSetChartType: PropTypes.func.isRequired,
-  provinces: PropTypes.arrayOf(PropTypes.string).isRequired,
-  hasProvinces: PropTypes.bool.isRequired,
-  cities: PropTypes.arrayOf(PropTypes.string).isRequired,
-  hasCities: PropTypes.bool.isRequired,
+  cities: PropTypes.arrayOf(
+    PropTypes.shape({ id: PropTypes.string, name: PropTypes.string }),
+  ).isRequired,
   data: PropTypes.arrayOf(
     PropTypes.shape({
       Country: PropTypes.string,

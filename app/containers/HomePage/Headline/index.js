@@ -24,9 +24,9 @@ const Headline = ({ country, province, city, className }) => {
   }
 
   return (
-    <Typography variant="h6" className={className}>
+    <Typography className={className}>
       {parts.map((part, index) => (
-        <span>
+        <span key={part}>
           {index ? ', ' : undefined}
           {part}
         </span>
@@ -37,9 +37,14 @@ const Headline = ({ country, province, city, className }) => {
 
 Headline.propTypes = {
   country: PropTypes.string.isRequired,
-  province: PropTypes.string.isRequired,
-  city: PropTypes.string.isRequired,
+  province: PropTypes.string,
+  city: PropTypes.string,
   className: PropTypes.string,
+};
+
+Headline.defaultProps = {
+  province: DEFAULT_PROVINCE,
+  city: DEFAULT_CITY,
 };
 
 export default Headline;

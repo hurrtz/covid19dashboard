@@ -8,5 +8,11 @@ export const StyledPaper = styled(Paper)`
 `;
 
 export const StyledHeadline = styled(Headline)`
-  padding: 24px 32px 12px;
+  padding: 24px 24px 12px;
+`;
+
+export const SettingsWrapper = styled.div`
+  position: absolute;
+  top: 12px;
+  right: -24px;
 `;
