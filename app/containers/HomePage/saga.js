@@ -1,5 +1,6 @@
 import { takeLatest, put, select } from 'redux-saga/effects';
 import axios from 'axios';
+import store from 'store';
 
 import {
   FETCH_COUNTRIES,
@@ -8,12 +9,16 @@ import {
   FETCH_COUNTRY_DATA,
 } from './constants';
 import { setAvailableCountries, setCountryData } from './actions';
-import { makeSelectedCountryObject } from './selectors';
+import { makeSelectedCountryObject, makeAvailableCountries } from './selectors';
 
 export function* fetchCountries() {
-  const countries = yield axios.get(FETCH_COUNTRIES_URL);
+  if (!(yield select(makeAvailableCountries()))) {
+    const countries = yield axios.get(FETCH_COUNTRIES_URL);
 
-  yield put(setAvailableCountries(countries.data));
+    store.set('countries', countries.data);
+
+    yield put(setAvailableCountries(countries.data));
+  }
 }
 
 export function* fetchCountryData() {

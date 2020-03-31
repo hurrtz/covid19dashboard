@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import produce from 'immer';
+import store from 'store';
 
 import {
   SET_SELECTED_COUNTRY,
@@ -17,7 +18,7 @@ export const initialState = {
   selectedChartType: DEFAULT_CHART_TYPE,
   selectedCountry: '',
   selectedProvince: DEFAULT_PROVINCE,
-  availableCountries: [],
+  availableCountries: store.get('countries'),
   data: {},
 };
 
