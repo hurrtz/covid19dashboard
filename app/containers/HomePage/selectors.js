@@ -1,27 +1,23 @@
 import { createSelector } from 'reselect';
 import moment from 'moment';
+import { trim } from 'lodash';
 
-import { initialState, DEFAULT_PROVINCE } from './reducer';
+import { DEFAULT_PROVINCE, DEFAULT_CITY } from './constants';
+import { initialState } from './reducer';
 
 const selectApplication = (state) => state.application || initialState;
 
 const makeSelectedCountry = () =>
-  createSelector(
-    selectApplication,
-    (application) => application.selectedCountry,
-  );
+  createSelector(selectApplication, (application) => application.country);
 
 const makeSelectedProvince = () =>
-  createSelector(
-    selectApplication,
-    (application) => application.selectedProvince,
-  );
+  createSelector(selectApplication, (application) => application.province);
+
+const makeSelectedCity = () =>
+  createSelector(selectApplication, (application) => application.city);
 
 const makeSelectedChartType = () =>
-  createSelector(
-    selectApplication,
-    (application) => application.selectedChartType,
-  );
+  createSelector(selectApplication, (application) => application.chartType);
 
 const makeAvailableCountries = () =>
   createSelector(
@@ -38,20 +34,40 @@ const makeSelectedCountryObject = () =>
       )[0] || {},
   );
 
+const makeProvinces = () =>
+  createSelector(makeSelectedCountryObject(), (country) =>
+    country.Provinces.filter((province) => province.indexOf(',') <= 0).sort(),
+  );
+
+const makeAllProvinces = () =>
+  createSelector(makeSelectedCountryObject(), (country) =>
+    [...country.Provinces].sort(),
+  );
+
 const makeHasProvinces = () =>
   createSelector(
-    makeSelectedCountryObject(),
-    (country) => country && country.Provinces && country.Provinces.length > 1,
+    makeProvinces(),
+    (provinces) => provinces && provinces.length > 1,
   );
 
 const makeData = () =>
   createSelector(selectApplication, (application) => application.data);
 
-const makeProvince = () =>
+const makeProvinceCities = () =>
   createSelector(
-    selectApplication,
-    (application) => application.selectedProvince,
+    [makeAllProvinces(), makeSelectedProvince()],
+    (allProvinces, selectedProvince) =>
+      allProvinces
+        .filter(
+          (province) =>
+            province.indexOf(selectedProvince) === 0 &&
+            province !== selectedProvince,
+        )
+        .map((city) => ({ id: city, name: trim(city.split(',')[1]) })),
   );
+
+const makeProvinceHasCities = () =>
+  createSelector([makeProvinceCities()], (cities) => cities.length > 1);
 
 const makeCountryData = () =>
   createSelector(
@@ -64,10 +80,20 @@ const makeCountryData = () =>
 
 const makeCountryDataMappedForChart = () =>
   createSelector(
-    [makeCountryData(), makeProvince()],
-    (_countryData, selectedProvince) => {
+    [makeCountryData(), makeSelectedProvince(), makeSelectedCity()],
+    (_countryData, selectedProvince, selectedCity) => {
       const countryData = { ..._countryData };
       const availableCategories = [];
+
+      let province = DEFAULT_PROVINCE;
+
+      if (selectedProvince && selectedProvince !== DEFAULT_PROVINCE) {
+        province = selectedProvince;
+      }
+
+      if (selectedCity && selectedCity !== DEFAULT_CITY) {
+        province = selectedCity;
+      }
 
       if (countryData.confirmed && countryData.confirmed.length) {
         availableCategories.push('confirmed');
@@ -85,10 +111,7 @@ const makeCountryDataMappedForChart = () =>
         const entriesByDate = {};
 
         countryData[category].forEach((entry) => {
-          if (
-            entry.Province === selectedProvince ||
-            selectedProvince === DEFAULT_PROVINCE
-          ) {
+          if (entry.Province === province || province === DEFAULT_PROVINCE) {
             if (!entriesByDate[entry.Date]) {
               entriesByDate[entry.Date] = { ...entry };
             } else {
@@ -118,10 +141,14 @@ export {
   selectApplication,
   makeSelectedCountry,
   makeSelectedProvince,
+  makeSelectedCity,
   makeSelectedChartType,
   makeAvailableCountries,
   makeSelectedCountryObject,
   makeCountryData,
   makeCountryDataMappedForChart,
+  makeProvinces,
   makeHasProvinces,
+  makeProvinceCities,
+  makeProvinceHasCities,
 };

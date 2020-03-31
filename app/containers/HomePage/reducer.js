@@ -10,17 +10,18 @@ import {
   SET_COUNTRY_DATA,
   SET_CHART_TYPE,
   CHART_TYPE_LINE_CHART,
+  DEFAULT_COUNTRY,
+  DEFAULT_PROVINCE,
+  DEFAULT_CITY,
 } from './constants';
 
-export const DEFAULT_PROVINCE = 'ALL';
-export const DEFAULT_CITY = 'ALL';
 export const DEFAULT_CHART_TYPE = CHART_TYPE_LINE_CHART;
 
 export const initialState = {
-  selectedChartType: DEFAULT_CHART_TYPE,
-  selectedCountry: '',
-  selectedProvince: DEFAULT_PROVINCE,
-  selectedCity: DEFAULT_CITY,
+  chartType: DEFAULT_CHART_TYPE,
+  country: DEFAULT_COUNTRY,
+  province: DEFAULT_PROVINCE,
+  city: DEFAULT_CITY,
   availableCountries: store.get('countries'),
   data: {},
 };
@@ -29,22 +30,22 @@ const applicationReducer = (state = initialState, action) =>
   produce(state, (draft) => {
     switch (action.type) {
       case SET_SELECTED_COUNTRY:
-        draft.selectedCountry = action.payload;
-        draft.selectedProvince = DEFAULT_PROVINCE;
-        draft.selectedCity = DEFAULT_CITY;
+        draft.country = action.payload;
+        draft.province = DEFAULT_PROVINCE;
+        draft.city = DEFAULT_CITY;
         break;
 
       case SET_SELECTED_PROVINCE:
-        draft.selectedProvince = action.payload;
-        draft.selectedCity = DEFAULT_CITY;
+        draft.province = action.payload;
+        draft.city = DEFAULT_CITY;
         break;
 
       case SET_SELECTED_CITY:
-        draft.selectedCity = action.payload;
+        draft.city = action.payload;
         break;
 
       case SET_CHART_TYPE:
-        draft.selectedChartType = action.payload;
+        draft.chartType = action.payload;
         break;
 
       case SET_AVAILABLE_COUNTRIES:
@@ -52,11 +53,11 @@ const applicationReducer = (state = initialState, action) =>
         break;
 
       case SET_COUNTRY_DATA:
-        if (!draft.data[state.selectedCountry]) {
-          draft.data[state.selectedCountry] = {};
+        if (!draft.data[state.country]) {
+          draft.data[state.country] = {};
         }
 
-        draft.data[state.selectedCountry][action.payload.category] =
+        draft.data[state.country][action.payload.category] =
           action.payload.data;
         break;
 
