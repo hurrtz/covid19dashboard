@@ -1,6 +1,7 @@
 import {
   SET_SELECTED_COUNTRY,
   SET_SELECTED_PROVINCE,
+  SET_SELECTED_CITY,
   FETCH_COUNTRIES,
   SET_AVAILABLE_COUNTRIES,
   SET_COUNTRY_DATA,
@@ -16,6 +17,11 @@ export const setSelectedCountry = (country) => ({
 export const setSelectedProvince = (province) => ({
   type: SET_SELECTED_PROVINCE,
   payload: province,
+});
+
+export const setSelectedCity = (city) => ({
+  type: SET_SELECTED_CITY,
+  payload: city,
 });
 
 export const fetchCountries = () => ({ type: FETCH_COUNTRIES });
