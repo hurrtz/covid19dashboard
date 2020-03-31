@@ -2,6 +2,8 @@
 import produce from 'immer';
 import store from 'store';
 
+import './initializeStoreData';
+
 import {
   SET_SELECTED_COUNTRY,
   SET_SELECTED_PROVINCE,
@@ -9,19 +11,15 @@ import {
   SET_AVAILABLE_COUNTRIES,
   SET_COUNTRY_DATA,
   SET_CHART_TYPE,
-  CHART_TYPE_LINE_CHART,
-  DEFAULT_COUNTRY,
   DEFAULT_PROVINCE,
   DEFAULT_CITY,
 } from './constants';
 
-export const DEFAULT_CHART_TYPE = CHART_TYPE_LINE_CHART;
-
 export const initialState = {
-  chartType: DEFAULT_CHART_TYPE,
-  country: DEFAULT_COUNTRY,
-  province: DEFAULT_PROVINCE,
-  city: DEFAULT_CITY,
+  chartType: store.get('chartType'),
+  country: store.get('country'),
+  province: store.get('province'),
+  city: store.get('city'),
   availableCountries: store.get('countries'),
   data: {},
 };
@@ -33,19 +31,26 @@ const applicationReducer = (state = initialState, action) =>
         draft.country = action.payload;
         draft.province = DEFAULT_PROVINCE;
         draft.city = DEFAULT_CITY;
+        store.set('country', action.payload);
+        store.set('province', DEFAULT_PROVINCE);
+        store.set('city', DEFAULT_CITY);
         break;
 
       case SET_SELECTED_PROVINCE:
         draft.province = action.payload;
         draft.city = DEFAULT_CITY;
+        store.set('province', action.payload);
+        store.set('city', DEFAULT_CITY);
         break;
 
       case SET_SELECTED_CITY:
         draft.city = action.payload;
+        store.set('city', action.payload);
         break;
 
       case SET_CHART_TYPE:
         draft.chartType = action.payload;
+        store.set('chartType', action.payload);
         break;
 
       case SET_AVAILABLE_COUNTRIES:
