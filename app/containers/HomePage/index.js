@@ -7,9 +7,9 @@ import { flow } from 'lodash';
 
 import { Consumer as hasApplicationConsumer } from 'contexts/Application';
 import Header from 'components/Header';
-import LineChart from 'components/Charts/Line';
 import TreemapChart from 'components/Charts/Treemap';
 import ChartSettings from 'containers/Charts/Settings';
+import LineChart from 'containers/Charts/Line';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
@@ -17,7 +17,6 @@ import {
   makeSelectedCity,
   makeSelectedChartType,
   makeAvailableCountries,
-  makeCountryDataMappedForChart,
   makeProvinces,
   makeHasProvinces,
   makeProvinceCities,
@@ -48,7 +47,6 @@ const homePage = ({
   onFetchCountryData,
   onSetChartType,
   cities,
-  data,
 }) => {
   useInjectSaga({ key, saga });
 
@@ -71,15 +69,11 @@ const homePage = ({
 
     switch (selectedChartType) {
       case CHART_TYPE_LINE_CHART:
-        chart = (
-          <LineChart width={getWidth()} height={getHeight()} data={data} />
-        );
+        chart = <LineChart width={getWidth()} height={getHeight()} />;
         break;
 
       case CHART_TYPE_TREEMAP_CHART:
-        chart = (
-          <TreemapChart width={getWidth()} height={getHeight()} data={data} />
-        );
+        chart = <TreemapChart width={getWidth()} height={getHeight()} />;
         break;
 
       default:
@@ -114,7 +108,7 @@ const homePage = ({
         <Grid item />
       </Grid>
       <Grid container direction="column" spacing={4}>
-        {data && <Grid item>{renderChart()}</Grid>}
+        <Grid item>{renderChart()}</Grid>
       </Grid>
     </Fragment>
   );
@@ -139,17 +133,6 @@ homePage.propTypes = {
   cities: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string, name: PropTypes.string }),
   ).isRequired,
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      Country: PropTypes.string,
-      Province: PropTypes.string,
-      Lat: PropTypes.number,
-      Lon: PropTypes.number,
-      Date: PropTypes.string,
-      Cases: PropTypes.number,
-      Status: PropTypes.string,
-    }),
-  ),
   dimensions: PropTypes.shape({
     width: PropTypes.number,
     height: PropTypes.number,
@@ -167,7 +150,6 @@ const mapStateToProps = createSelector(
     makeHasProvinces(),
     makeProvinceCities(),
     makeProvinceHasCities(),
-    makeCountryDataMappedForChart(),
   ],
   (
     selectedCountry,
@@ -179,7 +161,6 @@ const mapStateToProps = createSelector(
     hasProvinces,
     cities,
     hasCities,
-    data,
   ) => ({
     selectedCountry,
     selectedProvince,
@@ -190,7 +171,6 @@ const mapStateToProps = createSelector(
     hasProvinces,
     cities,
     hasCities,
-    data,
   }),
 );
 

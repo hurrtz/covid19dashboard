@@ -80,7 +80,7 @@ const makeCountryData = () =>
         : [],
   );
 
-const makeCountryDataMappedForChart = () =>
+const makeCountryDataForLineChart = () =>
   createSelector(
     [makeCountryData(), makeSelectedProvince(), makeSelectedCity()],
     (_countryData, selectedProvince, selectedCity) => {
@@ -148,7 +148,7 @@ export {
   makeAvailableCountries,
   makeSelectedCountryObject,
   makeCountryData,
-  makeCountryDataMappedForChart,
+  makeCountryDataForLineChart,
   makeProvinces,
   makeHasProvinces,
   makeProvinceCities,
