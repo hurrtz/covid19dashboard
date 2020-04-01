@@ -9,7 +9,7 @@ import { Consumer as hasApplicationConsumer } from 'contexts/Application';
 import Header from 'components/Header';
 import LineChart from 'components/Charts/Line';
 import TreemapChart from 'components/Charts/Treemap';
-import ChartSettings from 'containers/Chart/Settings';
+import ChartSettings from 'containers/Charts/Settings';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
