@@ -2,16 +2,12 @@ import React from 'react';
 import { Typography } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
-import {
-  DEFAULT_COUNTRY,
-  DEFAULT_PROVINCE,
-  DEFAULT_CITY,
-} from 'containers/HomePage/constants';
+import { DEFAULT_PROVINCE, DEFAULT_CITY } from 'containers/HomePage/constants';
 
 const Headline = ({ country, province, city, className }) => {
   const parts = [];
 
-  if (country !== DEFAULT_COUNTRY) {
+  if (country) {
     parts.push(country);
   }
 

@@ -14,7 +14,7 @@ const LineChart = ({ width, height, data }) => (
     width={width}
     height={height}
     data={data}
-    margin={{ top: 24, right: 48, left: 0, bottom: 12 }}
+    margin={{ top: 8, right: 24, left: 0, bottom: 12 }}
   >
     <XAxis dataKey="name" />
     <YAxis />

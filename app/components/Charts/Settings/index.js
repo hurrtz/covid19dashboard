@@ -7,9 +7,10 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Fab,
   Grid,
   Button,
+  ButtonGroup,
+  IconButton,
 } from '@material-ui/core';
 import { Settings as SettingsIcon } from '@material-ui/icons';
 
@@ -95,9 +96,11 @@ const ChartSettings = ({
           </Button>
         </DialogActions>
       </Dialog>
-      <Fab onClick={handleClick} color="primary" size="medium">
-        <SettingsIcon fontSize="small" />
-      </Fab>
+      <ButtonGroup>
+        <IconButton onClick={handleClick}>
+          <SettingsIcon fontSize="small" />
+        </IconButton>
+      </ButtonGroup>
     </Fragment>
   );
 };

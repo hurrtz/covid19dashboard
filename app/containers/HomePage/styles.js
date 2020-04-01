@@ -14,5 +14,5 @@ export const StyledHeadline = styled(Headline)`
 export const SettingsWrapper = styled.div`
   position: absolute;
   top: 12px;
-  right: -24px;
+  right: 24px;
 `;

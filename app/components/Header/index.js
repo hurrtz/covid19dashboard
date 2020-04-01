@@ -7,6 +7,7 @@ import {
   IconButton,
   Grid,
   Tooltip,
+  ButtonGroup,
 } from '@material-ui/core';
 import {
   Timeline as LineChartIcon,
@@ -31,25 +32,29 @@ const Header = ({ chartType, handleChangeChartType }) => (
           </Typography>
         </Grid>
         <Grid item>
-          <Tooltip title="Line chart">
-            <IconButton
-              color={
-                chartType === CHART_TYPE_LINE_CHART ? 'primary' : 'default'
-              }
-              onClick={() => handleChangeChartType(CHART_TYPE_LINE_CHART)}
-            >
-              <LineChartIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="World Map">
-            <IconButton
-              disabled
-              color={chartType === CHART_TYPE_MAP_CHART ? 'primary' : 'default'}
-              onClick={() => handleChangeChartType(CHART_TYPE_MAP_CHART)}
-            >
-              <MapChartIcon />
-            </IconButton>
-          </Tooltip>
+          <ButtonGroup>
+            <Tooltip title="Line chart">
+              <IconButton
+                color={
+                  chartType === CHART_TYPE_LINE_CHART ? 'primary' : 'default'
+                }
+                onClick={() => handleChangeChartType(CHART_TYPE_LINE_CHART)}
+              >
+                <LineChartIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="World Map">
+              <IconButton
+                disabled
+                color={
+                  chartType === CHART_TYPE_MAP_CHART ? 'primary' : 'default'
+                }
+                onClick={() => handleChangeChartType(CHART_TYPE_MAP_CHART)}
+              >
+                <MapChartIcon />
+              </IconButton>
+            </Tooltip>
+          </ButtonGroup>
         </Grid>
       </Grid>
     </Toolbar>
