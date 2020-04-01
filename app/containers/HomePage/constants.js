@@ -14,6 +14,7 @@ export const DEFAULT_CITY = 'ALL';
 
 export const CHART_TYPE_LINE_CHART = 'LINE_CHART';
 export const CHART_TYPE_MAP_CHART = 'MAP_CHART';
+export const CHART_TYPE_TREEMAP_CHART = 'TREEMAP_CHART';
 
 export const API = 'https://api.covid19api.com';
 export const FETCH_COUNTRIES_URL = `${API}/countries`;

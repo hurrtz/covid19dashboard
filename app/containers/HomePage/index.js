@@ -8,6 +8,7 @@ import { flow } from 'lodash';
 import { Consumer as hasApplicationConsumer } from 'contexts/Application';
 import Header from 'components/Header';
 import LineChart from 'components/Charts/Line';
+import TreemapChart from 'components/Charts/Treemap';
 import ChartSettings from 'containers/Chart/Settings';
 import { useInjectSaga } from 'utils/injectSaga';
 
@@ -32,6 +33,7 @@ import {
   setChartType,
 } from './actions';
 import saga from './saga';
+import { CHART_TYPE_LINE_CHART, CHART_TYPE_TREEMAP_CHART } from './constants';
 import { StyledPaper, StyledHeadline, SettingsWrapper } from './styles';
 
 const key = 'APPLICATION';
@@ -64,21 +66,43 @@ const homePage = ({
 
   const getWidth = () => width - 48;
 
-  const renderChart = () => (
-    <StyledPaper>
-      <StyledHeadline
-        country={selectedCountry.Country}
-        province={selectedProvince}
-        city={(cities.filter((city) => city.id === selectedCity)[0] || {}).name}
-      />
+  const renderChart = () => {
+    let chart;
 
-      <LineChart width={getWidth()} height={getHeight()} data={data} />
+    switch (selectedChartType) {
+      case CHART_TYPE_LINE_CHART:
+        chart = (
+          <LineChart width={getWidth()} height={getHeight()} data={data} />
+        );
+        break;
 
-      <SettingsWrapper>
-        <ChartSettings />
-      </SettingsWrapper>
-    </StyledPaper>
-  );
+      case CHART_TYPE_TREEMAP_CHART:
+        chart = (
+          <TreemapChart width={getWidth()} height={getHeight()} data={data} />
+        );
+        break;
+
+      default:
+    }
+
+    return (
+      <StyledPaper>
+        <StyledHeadline
+          country={selectedCountry.Country}
+          province={selectedProvince}
+          city={
+            (cities.filter((city) => city.id === selectedCity)[0] || {}).name
+          }
+        />
+
+        {chart}
+
+        <SettingsWrapper>
+          <ChartSettings />
+        </SettingsWrapper>
+      </StyledPaper>
+    );
+  };
 
   return (
     <Fragment>

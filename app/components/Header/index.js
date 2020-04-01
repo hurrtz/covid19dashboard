@@ -12,12 +12,14 @@ import {
 import {
   Timeline as LineChartIcon,
   Public as MapChartIcon,
+  Dashboard as TreemapIcon,
 } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 
 import {
   CHART_TYPE_LINE_CHART,
   CHART_TYPE_MAP_CHART,
+  CHART_TYPE_TREEMAP_CHART,
 } from 'containers/HomePage/constants';
 import messages from './messages';
 
@@ -41,6 +43,16 @@ const Header = ({ chartType, handleChangeChartType }) => (
                 onClick={() => handleChangeChartType(CHART_TYPE_LINE_CHART)}
               >
                 <LineChartIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Treemap">
+              <IconButton
+                color={
+                  chartType === CHART_TYPE_TREEMAP_CHART ? 'primary' : 'default'
+                }
+                onClick={() => handleChangeChartType(CHART_TYPE_TREEMAP_CHART)}
+              >
+                <TreemapIcon />
               </IconButton>
             </Tooltip>
             <Tooltip title="World Map">
