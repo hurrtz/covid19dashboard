@@ -13,6 +13,7 @@ import {
   SET_CHART_TYPE,
   DEFAULT_PROVINCE,
   DEFAULT_CITY,
+  SET_SUMMARY,
 } from './constants';
 
 export const initialState = {
@@ -22,6 +23,7 @@ export const initialState = {
   city: store.get('city'),
   availableCountries: store.get('countries'),
   data: {},
+  summary: {},
 };
 
 const applicationReducer = (state = initialState, action) =>
@@ -64,6 +66,10 @@ const applicationReducer = (state = initialState, action) =>
 
         draft.data[state.country][action.payload.category] =
           action.payload.data;
+        break;
+
+      case SET_SUMMARY:
+        draft.summary = action.payload;
         break;
 
       default:

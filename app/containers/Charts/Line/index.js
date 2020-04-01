@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createSelector } from 'reselect';
 
-import { makeCountryDataForLineChart } from 'containers/HomePage/selectors';
+import { makeCountryDataForLineChart as makeData } from 'containers/HomePage/selectors';
 
 import ChartLineComponent from 'components/Charts/Line';
 
@@ -23,9 +23,6 @@ LineChart.propTypes = {
   ),
 };
 
-const mapStateToProps = createSelector(
-  [makeCountryDataForLineChart()],
-  (data) => ({ data }),
-);
+const mapStateToProps = createSelector([makeData()], (data) => ({ data }));
 
 export default connect(mapStateToProps)(LineChart);

@@ -7,9 +7,9 @@ import { flow } from 'lodash';
 
 import { Consumer as hasApplicationConsumer } from 'contexts/Application';
 import Header from 'components/Header';
-import TreemapChart from 'components/Charts/Treemap';
-import ChartSettings from 'containers/Charts/Settings';
 import LineChart from 'containers/Charts/Line';
+import TreemapChart from 'containers/Charts/Treemap';
+import ChartSettings from 'containers/Charts/Settings';
 import { useInjectSaga } from 'utils/injectSaga';
 
 import {
@@ -60,7 +60,7 @@ const homePage = ({
     }
   }, [selectedCountry]);
 
-  const getHeight = () => height - 104 - 86;
+  const getHeight = () => height - 160;
 
   const getWidth = () => width - 48;
 
@@ -69,33 +69,39 @@ const homePage = ({
 
     switch (selectedChartType) {
       case CHART_TYPE_LINE_CHART:
-        chart = <LineChart width={getWidth()} height={getHeight()} />;
+        chart = (
+          <Fragment>
+            <StyledHeadline
+              country={selectedCountry.Country}
+              province={selectedProvince}
+              city={
+                (cities.filter((city) => city.id === selectedCity)[0] || {})
+                  .name
+              }
+            />
+
+            <LineChart width={getWidth()} height={getHeight()} />
+
+            <SettingsWrapper>
+              <ChartSettings />
+            </SettingsWrapper>
+          </Fragment>
+        );
         break;
 
       case CHART_TYPE_TREEMAP_CHART:
-        chart = <TreemapChart width={getWidth()} height={getHeight()} />;
+        chart = (
+          <TreemapChart
+            width={getWidth()}
+            height={Math.max(getHeight(), 1000)}
+          />
+        );
         break;
 
       default:
     }
 
-    return (
-      <StyledPaper>
-        <StyledHeadline
-          country={selectedCountry.Country}
-          province={selectedProvince}
-          city={
-            (cities.filter((city) => city.id === selectedCity)[0] || {}).name
-          }
-        />
-
-        {chart}
-
-        <SettingsWrapper>
-          <ChartSettings />
-        </SettingsWrapper>
-      </StyledPaper>
-    );
+    return <StyledPaper>{chart}</StyledPaper>;
   };
 
   return (

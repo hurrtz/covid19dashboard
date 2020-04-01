@@ -7,8 +7,10 @@ import {
   FETCH_COUNTRIES_URL,
   API,
   FETCH_COUNTRY_DATA,
+  FETCH_SUMMARY,
+  FETCH_SUMMARY_URL,
 } from './constants';
-import { setAvailableCountries, setCountryData } from './actions';
+import { setAvailableCountries, setCountryData, setSummary } from './actions';
 import { makeSelectedCountryObject, makeAvailableCountries } from './selectors';
 
 export function* fetchCountries() {
@@ -19,6 +21,12 @@ export function* fetchCountries() {
 
     yield put(setAvailableCountries(countries.data));
   }
+}
+
+export function* fetchSummary() {
+  const summary = yield axios.get(FETCH_SUMMARY_URL);
+
+  yield put(setSummary(summary.data));
 }
 
 export function* fetchCountryData() {
@@ -48,4 +56,5 @@ export function* fetchCountryData() {
 export default function* applicationSaga() {
   yield takeLatest(FETCH_COUNTRY_DATA, fetchCountryData);
   yield takeLatest(FETCH_COUNTRIES, fetchCountries);
+  yield takeLatest(FETCH_SUMMARY, fetchSummary);
 }

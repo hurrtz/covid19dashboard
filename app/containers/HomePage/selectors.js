@@ -19,6 +19,9 @@ const makeSelectedCity = () =>
 const makeSelectedChartType = () =>
   createSelector(selectApplication, (application) => application.chartType);
 
+const makeSummary = () =>
+  createSelector(selectApplication, (application) => application.summary);
+
 const makeAvailableCountries = () =>
   createSelector(
     selectApplication,
@@ -139,6 +142,36 @@ const makeCountryDataForLineChart = () =>
     },
   );
 
+const makeCountryDataForTreemapChart = () =>
+  createSelector([makeSummary()], (summary) => {
+    if (!summary.Countries) {
+      return undefined;
+    }
+
+    return [
+      {
+        name: '',
+        children: summary.Countries.map((country) => ({
+          name: `${trim(country.Country)}`,
+          children: [
+            {
+              type: 'confirmed',
+              cases: country.TotalConfirmed,
+            },
+            {
+              type: 'deaths',
+              cases: country.TotalDeaths,
+            },
+            {
+              type: 'recovered',
+              cases: country.TotalRecovered,
+            },
+          ],
+        })),
+      },
+    ];
+  });
+
 export {
   selectApplication,
   makeSelectedCountry,
@@ -149,6 +182,7 @@ export {
   makeSelectedCountryObject,
   makeCountryData,
   makeCountryDataForLineChart,
+  makeCountryDataForTreemapChart,
   makeProvinces,
   makeHasProvinces,
   makeProvinceCities,

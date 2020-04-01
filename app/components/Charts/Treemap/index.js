@@ -1,28 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {
-  Treemap as TreemapChart,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Line,
-  Tooltip,
-} from 'recharts';
+import { Treemap as TreemapChart, Tooltip } from 'recharts';
+
+import TreemapTooltip from './Tooltip';
 
 const Treemap = ({ width, height, data }) => (
   <TreemapChart
     width={width}
     height={height}
     data={data}
+    dataKey="cases"
     margin={{ top: 8, right: 24, left: 0, bottom: 12 }}
+    isAnimationActive={false}
+    aspectRatio={3 / 4}
   >
-    <XAxis dataKey="name" />
-    <YAxis />
-    <Tooltip />
-    <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-    <Line type="monotone" dataKey="confirmed" stroke="#009" />
-    <Line type="monotone" dataKey="recovered" stroke="#090" />
-    <Line type="monotone" dataKey="deaths" stroke="#900" />
+    <Tooltip content={<TreemapTooltip />} />
   </TreemapChart>
 );
 
