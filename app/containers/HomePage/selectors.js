@@ -22,6 +22,9 @@ const makeSelectedChartType = () =>
 const makeSummary = () =>
   createSelector(selectApplication, (application) => application.summary);
 
+const makeShowDays = () =>
+  createSelector(selectApplication, (application) => application.showDays);
+
 const makeAvailableCountries = () =>
   createSelector(
     selectApplication,
@@ -187,4 +190,5 @@ export {
   makeHasProvinces,
   makeProvinceCities,
   makeProvinceHasCities,
+  makeShowDays,
 };

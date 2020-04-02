@@ -9,9 +9,9 @@ import {
   DialogActions,
   Grid,
   Button,
-  ButtonGroup,
   IconButton,
 } from '@material-ui/core';
+import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import { Settings as SettingsIcon } from '@material-ui/icons';
 
 import {
@@ -23,11 +23,13 @@ import {
   makeSelectedCity,
   makeProvinceCities,
   makeProvinceHasCities,
+  makeShowDays,
 } from 'containers/HomePage/selectors';
 import {
   setSelectedCountry,
   setSelectedProvince,
   setSelectedCity,
+  setShowDays,
 } from 'containers/HomePage/actions';
 
 import SelectCountry from './SelectCountry';
@@ -47,6 +49,8 @@ const ChartSettings = ({
   selectedCity,
   cities,
   hasCities,
+  showDays,
+  onSetShowDays,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -56,6 +60,10 @@ const ChartSettings = ({
 
   const handleClick = () => {
     setIsOpen(!isOpen);
+  };
+
+  const handleChangeShowDays = (_, newShowDays) => {
+    onSetShowDays(newShowDays);
   };
 
   return (
@@ -96,11 +104,18 @@ const ChartSettings = ({
           </Button>
         </DialogActions>
       </Dialog>
-      <ButtonGroup>
-        <IconButton onClick={handleClick}>
-          <SettingsIcon fontSize="small" />
-        </IconButton>
-      </ButtonGroup>
+      <ToggleButtonGroup
+        value={showDays}
+        size="small"
+        exclusive
+        onChange={handleChangeShowDays}
+      >
+        <ToggleButton value="-7 DAYS">last 7 days</ToggleButton>
+        <ToggleButton value="ALL">all days</ToggleButton>
+      </ToggleButtonGroup>
+      <IconButton size="medium" onClick={handleClick}>
+        <SettingsIcon fontSize="small" />
+      </IconButton>
     </Fragment>
   );
 };
@@ -126,6 +141,7 @@ ChartSettings.propTypes = {
   selectedCity: PropTypes.string.isRequired,
   provinces: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasProvinces: PropTypes.bool.isRequired,
+  showDays: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string, name: PropTypes.string }),
   ).isRequired,
@@ -133,6 +149,7 @@ ChartSettings.propTypes = {
   onSetSelectedCountry: PropTypes.func.isRequired,
   onSetSelectedProvince: PropTypes.func.isRequired,
   onSetSelectedCity: PropTypes.func.isRequired,
+  onSetShowDays: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createSelector(
@@ -145,6 +162,7 @@ const mapStateToProps = createSelector(
     makeHasProvinces(),
     makeProvinceCities(),
     makeProvinceHasCities(),
+    makeShowDays(),
   ],
   (
     selectedCountry,
@@ -155,6 +173,7 @@ const mapStateToProps = createSelector(
     hasProvinces,
     cities,
     hasCities,
+    showDays,
   ) => ({
     selectedCountry,
     availableCountries,
@@ -164,6 +183,7 @@ const mapStateToProps = createSelector(
     hasProvinces,
     cities,
     hasCities,
+    showDays,
   }),
 );
 
@@ -173,6 +193,7 @@ const mapDispatchToProps = (dispatch) => ({
   onSetSelectedProvince: (selectedProvince) =>
     dispatch(setSelectedProvince(selectedProvince)),
   onSetSelectedCity: (selectedCity) => dispatch(setSelectedCity(selectedCity)),
+  onSetShowDays: (showDays) => dispatch(setShowDays(showDays)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartSettings);

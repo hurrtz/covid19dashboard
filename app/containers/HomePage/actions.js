@@ -9,6 +9,7 @@ import {
   SET_CHART_TYPE,
   FETCH_SUMMARY,
   SET_SUMMARY,
+  SET_SHOW_DAYS,
 } from './constants';
 
 export const setSelectedCountry = (country) => ({
@@ -33,6 +34,11 @@ export const fetchSummary = () => ({ type: FETCH_SUMMARY });
 export const setSummary = (summary) => ({
   type: SET_SUMMARY,
   payload: summary,
+});
+
+export const setShowDays = (showDays) => ({
+  type: SET_SHOW_DAYS,
+  payload: showDays,
 });
 
 export const setAvailableCountries = (countries) => ({

@@ -9,10 +9,12 @@ export const SET_COUNTRY_DATA = 'SET_COUNTRY_DATA';
 export const SET_CHART_TYPE = 'SET_CHART_TYPE';
 export const FETCH_SUMMARY = 'FETCH_SUMMARY';
 export const SET_SUMMARY = 'SET_SUMMARY';
+export const SET_SHOW_DAYS = 'SET_SHOW_DAYS';
 
 export const DEFAULT_COUNTRY = 'Germany';
 export const DEFAULT_PROVINCE = 'ALL';
 export const DEFAULT_CITY = 'ALL';
+export const DEFAULT_SHOW_DAYS = '-7 DAYS';
 
 export const CHART_TYPE_LINE_CHART = 'LINE_CHART';
 export const CHART_TYPE_MAP_CHART = 'MAP_CHART';

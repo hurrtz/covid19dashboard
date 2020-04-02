@@ -14,6 +14,8 @@ import {
   DEFAULT_PROVINCE,
   DEFAULT_CITY,
   SET_SUMMARY,
+  DEFAULT_SHOW_DAYS,
+  SET_SHOW_DAYS,
 } from './constants';
 
 export const initialState = {
@@ -22,6 +24,7 @@ export const initialState = {
   province: store.get('province'),
   city: store.get('city'),
   availableCountries: store.get('countries'),
+  showDays: DEFAULT_SHOW_DAYS,
   data: {},
   summary: {},
 };
@@ -70,6 +73,10 @@ const applicationReducer = (state = initialState, action) =>
 
       case SET_SUMMARY:
         draft.summary = action.payload;
+        break;
+
+      case SET_SHOW_DAYS:
+        draft.showDays = action.payload;
         break;
 
       default:
