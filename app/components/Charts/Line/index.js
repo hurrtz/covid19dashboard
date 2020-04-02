@@ -9,6 +9,8 @@ import {
   Tooltip,
 } from 'recharts';
 
+import CustomTooltip from './Tooltip';
+
 const LineChart = ({ width, height, data }) => (
   <RechartLineChart
     width={width}
@@ -18,7 +20,7 @@ const LineChart = ({ width, height, data }) => (
   >
     <XAxis dataKey="name" />
     <YAxis />
-    <Tooltip />
+    <Tooltip content={<CustomTooltip />} />
     <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
     <Line type="monotone" dataKey="confirmed" stroke="#009" />
     <Line type="monotone" dataKey="recovered" stroke="#090" />

@@ -32,6 +32,7 @@ import {
   setShowDays,
 } from 'containers/HomePage/actions';
 
+import { SHOW_DAYS_ALL, SHOW_DAYS_LAST_7_DAYS } from './constants';
 import SelectCountry from './SelectCountry';
 import SelectProvince from './SelectProvince';
 import SelectCity from './SelectCity';
@@ -63,7 +64,9 @@ const ChartSettings = ({
   };
 
   const handleChangeShowDays = (_, newShowDays) => {
-    onSetShowDays(newShowDays);
+    if (newShowDays) {
+      onSetShowDays(newShowDays);
+    }
   };
 
   return (
@@ -110,8 +113,8 @@ const ChartSettings = ({
         exclusive
         onChange={handleChangeShowDays}
       >
-        <ToggleButton value="-7 DAYS">last 7 days</ToggleButton>
-        <ToggleButton value="ALL">all days</ToggleButton>
+        <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>last 7 days</ToggleButton>
+        <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
       </ToggleButtonGroup>
       <IconButton size="medium" onClick={handleClick}>
         <SettingsIcon fontSize="small" />
@@ -141,7 +144,7 @@ ChartSettings.propTypes = {
   selectedCity: PropTypes.string.isRequired,
   provinces: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasProvinces: PropTypes.bool.isRequired,
-  showDays: PropTypes.string.isRequired,
+  showDays: PropTypes.number.isRequired,
   cities: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string, name: PropTypes.string }),
   ).isRequired,

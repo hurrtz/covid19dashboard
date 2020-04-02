@@ -81,6 +81,7 @@ module.exports = {
     'require-yield': 0,
     'react-hooks/rules-of-hooks': 0,
     'react/jsx-fragments': 0,
+    'no-bitwise': 0,
   },
   settings: {
     'import/resolver': {

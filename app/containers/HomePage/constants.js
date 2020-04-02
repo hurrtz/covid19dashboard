@@ -1,3 +1,5 @@
+import { SHOW_DAYS_LAST_7_DAYS } from 'components/Charts/Settings/constants';
+
 export const HANDLE_CHANGE_SELECTED_COUNTRY = 'HANDLE_CHANGE_SELECTED_COUNTRY';
 export const SET_SELECTED_COUNTRY = 'SET_SELECTED_COUNTRY';
 export const SET_SELECTED_PROVINCE = 'SET_SELECTED_PROVINCE';
@@ -14,7 +16,7 @@ export const SET_SHOW_DAYS = 'SET_SHOW_DAYS';
 export const DEFAULT_COUNTRY = 'Germany';
 export const DEFAULT_PROVINCE = 'ALL';
 export const DEFAULT_CITY = 'ALL';
-export const DEFAULT_SHOW_DAYS = '-7 DAYS';
+export const DEFAULT_SHOW_DAYS = SHOW_DAYS_LAST_7_DAYS;
 
 export const CHART_TYPE_LINE_CHART = 'LINE_CHART';
 export const CHART_TYPE_MAP_CHART = 'MAP_CHART';

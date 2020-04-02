@@ -1,18 +1,28 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+import { Card, CardContent, Typography } from '@material-ui/core';
 
 const numberFormat = new Intl.NumberFormat();
 
 const TreemapTooltip = ({ active, payload }) => {
   if (active) {
     return (
-      <div>{`${numberFormat.format(payload[0].payload.cases)} ${
-        payload[0].payload.type
-      } in ${payload[0].payload.root.name}`}</div>
+      <Card variant="outlined">
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="h2">
+            {payload[0].payload.root.name}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" component="p">
+            {`${numberFormat.format(payload[0].payload.cases)} ${
+              payload[0].payload.type
+            }`}
+          </Typography>
+        </CardContent>
+      </Card>
     );
   }
 
-  return <Fragment />;
+  return null;
 };
 
 TreemapTooltip.propTypes = {

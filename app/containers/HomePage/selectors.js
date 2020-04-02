@@ -86,13 +86,41 @@ const makeCountryData = () =>
         : [],
   );
 
+const makeCountryDataReducedByDays = () =>
+  createSelector(
+    [makeCountryData(), makeShowDays()],
+    (_countryData, showDays) => {
+      // return the raw object if showDays is in the all state, either with "null" or "Infinity" as value
+      if (!~~showDays) {
+        return _countryData;
+      }
+
+      const countryData = { ..._countryData };
+      const now = moment().unix();
+      const then = moment().subtract(2, 'd').add(showDays, 'd').unix();
+
+      Object.keys(countryData).forEach((status) => {
+        countryData[status] = countryData[status].filter((entry) => {
+          const entryTimestamp = moment(entry.Date).unix();
+
+          return entryTimestamp <= now && entryTimestamp >= then;
+        });
+      });
+
+      return countryData;
+    },
+  );
+
 const makeCountryDataForLineChart = () =>
   createSelector(
-    [makeCountryData(), makeSelectedProvince(), makeSelectedCity()],
+    [
+      makeCountryDataReducedByDays(),
+      makeSelectedProvince(),
+      makeSelectedCity(),
+    ],
     (_countryData, selectedProvince, selectedCity) => {
       const countryData = { ..._countryData };
-      const availableCategories = [];
-
+      const statuses = Object.keys(countryData);
       let province = DEFAULT_PROVINCE;
 
       if (selectedProvince && selectedProvince !== DEFAULT_PROVINCE) {
@@ -103,22 +131,10 @@ const makeCountryDataForLineChart = () =>
         province = selectedCity;
       }
 
-      if (countryData.confirmed && countryData.confirmed.length) {
-        availableCategories.push('confirmed');
-      }
-
-      if (countryData.deaths && countryData.deaths.length) {
-        availableCategories.push('deaths');
-      }
-
-      if (countryData.recovered && countryData.recovered.length) {
-        availableCategories.push('recovered');
-      }
-
-      availableCategories.forEach((category) => {
+      statuses.forEach((status) => {
         const entriesByDate = {};
 
-        countryData[category].forEach((entry) => {
+        countryData[status].forEach((entry) => {
           if (entry.Province === province || province === DEFAULT_PROVINCE) {
             if (!entriesByDate[entry.Date]) {
               entriesByDate[entry.Date] = { ...entry };
@@ -128,16 +144,16 @@ const makeCountryDataForLineChart = () =>
           }
         });
 
-        countryData[category] = Object.values(entriesByDate);
+        countryData[status] = Object.values(entriesByDate);
       });
 
-      return (countryData[availableCategories[0]] || []).map((day, index) => {
+      return (countryData[statuses[0]] || []).map((day, index) => {
         const dayOut = {
           name: moment(day.Date).format('l'),
         };
 
-        availableCategories.forEach((category) => {
-          dayOut[category] = countryData[category][index].Cases;
+        statuses.forEach((status) => {
+          dayOut[status] = countryData[status][index].Cases;
         });
 
         return dayOut;
