@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import moment from 'moment';
 import { trim } from 'lodash';
 
+import { SCALE_METHOD_LOGARITHMIC } from 'components/Charts/Settings/constants';
 import { DEFAULT_PROVINCE, DEFAULT_CITY } from './constants';
 import { initialState } from './reducer';
 
@@ -120,8 +121,9 @@ const makeCountryDataForLineChart = () =>
       makeCountryDataReducedByDays(),
       makeSelectedProvince(),
       makeSelectedCity(),
+      makeScaleMethod(),
     ],
-    (_countryData, selectedProvince, selectedCity) => {
+    (_countryData, selectedProvince, selectedCity, scaleMethod) => {
       const countryData = { ..._countryData };
       const statuses = Object.keys(countryData);
       let province = DEFAULT_PROVINCE;
@@ -146,6 +148,17 @@ const makeCountryDataForLineChart = () =>
             }
           }
         });
+
+        if (scaleMethod === SCALE_METHOD_LOGARITHMIC) {
+          countryData[status].forEach((entry) => {
+            entriesByDate[entry.Date].CasesOld =
+              entriesByDate[entry.Date].Cases;
+            entriesByDate[entry.Date].Cases = Math.max(
+              Math.log(entriesByDate[entry.Date].Cases),
+              0,
+            );
+          });
+        }
 
         countryData[status] = Object.values(entriesByDate);
       });
