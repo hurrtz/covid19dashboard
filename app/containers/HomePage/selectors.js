@@ -25,6 +25,9 @@ const makeSummary = () =>
 const makeShowDays = () =>
   createSelector(selectApplication, (application) => application.showDays);
 
+const makeScaleMethod = () =>
+  createSelector(selectApplication, (application) => application.scaleMethod);
+
 const makeAvailableCountries = () =>
   createSelector(
     selectApplication,
@@ -207,4 +210,5 @@ export {
   makeProvinceCities,
   makeProvinceHasCities,
   makeShowDays,
+  makeScaleMethod,
 };

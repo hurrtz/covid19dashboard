@@ -1,4 +1,7 @@
-import { SHOW_DAYS_LAST_7_DAYS } from 'components/Charts/Settings/constants';
+import {
+  SHOW_DAYS_LAST_7_DAYS,
+  SCALE_METHOD_LINEAR,
+} from 'components/Charts/Settings/constants';
 
 export const HANDLE_CHANGE_SELECTED_COUNTRY = 'HANDLE_CHANGE_SELECTED_COUNTRY';
 export const SET_SELECTED_COUNTRY = 'SET_SELECTED_COUNTRY';
@@ -12,11 +15,14 @@ export const SET_CHART_TYPE = 'SET_CHART_TYPE';
 export const FETCH_SUMMARY = 'FETCH_SUMMARY';
 export const SET_SUMMARY = 'SET_SUMMARY';
 export const SET_SHOW_DAYS = 'SET_SHOW_DAYS';
+export const SET_SCALE_METHOD = 'SET_SCALE_METHOD';
 
 export const DEFAULT_COUNTRY = 'Germany';
 export const DEFAULT_PROVINCE = 'ALL';
 export const DEFAULT_CITY = 'ALL';
 export const DEFAULT_SHOW_DAYS = SHOW_DAYS_LAST_7_DAYS;
+
+export const DEFAULT_SCALE_METHOD = SCALE_METHOD_LINEAR;
 
 export const CHART_TYPE_LINE_CHART = 'LINE_CHART';
 export const CHART_TYPE_MAP_CHART = 'MAP_CHART';

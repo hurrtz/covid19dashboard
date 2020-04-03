@@ -16,6 +16,8 @@ import {
   SET_SUMMARY,
   DEFAULT_SHOW_DAYS,
   SET_SHOW_DAYS,
+  SET_SCALE_METHOD,
+  DEFAULT_SCALE_METHOD,
 } from './constants';
 
 export const initialState = {
@@ -27,6 +29,7 @@ export const initialState = {
   showDays: DEFAULT_SHOW_DAYS,
   data: {},
   summary: {},
+  scaleMethod: DEFAULT_SCALE_METHOD,
 };
 
 const applicationReducer = (state = initialState, action) =>
@@ -77,6 +80,10 @@ const applicationReducer = (state = initialState, action) =>
 
       case SET_SHOW_DAYS:
         draft.showDays = action.payload;
+        break;
+
+      case SET_SCALE_METHOD:
+        draft.scaleMethod = action.payload;
         break;
 
       default:

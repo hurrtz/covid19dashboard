@@ -24,15 +24,22 @@ import {
   makeProvinceCities,
   makeProvinceHasCities,
   makeShowDays,
+  makeScaleMethod,
 } from 'containers/HomePage/selectors';
 import {
   setSelectedCountry,
   setSelectedProvince,
   setSelectedCity,
   setShowDays,
+  setScaleMethod,
 } from 'containers/HomePage/actions';
 
-import { SHOW_DAYS_ALL, SHOW_DAYS_LAST_7_DAYS } from './constants';
+import {
+  SHOW_DAYS_ALL,
+  SHOW_DAYS_LAST_7_DAYS,
+  SCALE_METHOD_LINEAR,
+  SCALE_METHOD_LOGARITHMIC,
+} from './constants';
 import SelectCountry from './SelectCountry';
 import SelectProvince from './SelectProvince';
 import SelectCity from './SelectCity';
@@ -51,7 +58,9 @@ const ChartSettings = ({
   cities,
   hasCities,
   showDays,
+  scaleMethod,
   onSetShowDays,
+  onSetScaleMethod,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,6 +75,12 @@ const ChartSettings = ({
   const handleChangeShowDays = (_, newShowDays) => {
     if (newShowDays) {
       onSetShowDays(newShowDays);
+    }
+  };
+
+  const handleChangeScaleMethod = (_, newScaleMethod) => {
+    if (newScaleMethod) {
+      onSetScaleMethod(newScaleMethod);
     }
   };
 
@@ -107,18 +122,39 @@ const ChartSettings = ({
           </Button>
         </DialogActions>
       </Dialog>
-      <ToggleButtonGroup
-        value={showDays}
-        size="small"
-        exclusive
-        onChange={handleChangeShowDays}
-      >
-        <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>last 7 days</ToggleButton>
-        <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
-      </ToggleButtonGroup>
-      <IconButton size="medium" onClick={handleClick}>
-        <SettingsIcon fontSize="small" />
-      </IconButton>
+      <Grid container spacing={2}>
+        <Grid item>
+          <ToggleButtonGroup
+            value={scaleMethod}
+            size="small"
+            exclusive
+            onChange={handleChangeScaleMethod}
+          >
+            <ToggleButton value={SCALE_METHOD_LINEAR}>linear</ToggleButton>
+            <ToggleButton value={SCALE_METHOD_LOGARITHMIC}>
+              logarithmic
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <ToggleButtonGroup
+            value={showDays}
+            size="small"
+            exclusive
+            onChange={handleChangeShowDays}
+          >
+            <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>
+              last 7 days
+            </ToggleButton>
+            <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+        <Grid item>
+          <IconButton size="medium" onClick={handleClick}>
+            <SettingsIcon fontSize="small" />
+          </IconButton>
+        </Grid>
+      </Grid>
     </Fragment>
   );
 };
@@ -145,6 +181,7 @@ ChartSettings.propTypes = {
   provinces: PropTypes.arrayOf(PropTypes.string).isRequired,
   hasProvinces: PropTypes.bool.isRequired,
   showDays: PropTypes.number.isRequired,
+  scaleMethod: PropTypes.string.isRequired,
   cities: PropTypes.arrayOf(
     PropTypes.shape({ id: PropTypes.string, name: PropTypes.string }),
   ).isRequired,
@@ -153,6 +190,7 @@ ChartSettings.propTypes = {
   onSetSelectedProvince: PropTypes.func.isRequired,
   onSetSelectedCity: PropTypes.func.isRequired,
   onSetShowDays: PropTypes.func.isRequired,
+  onSetScaleMethod: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createSelector(
@@ -166,6 +204,7 @@ const mapStateToProps = createSelector(
     makeProvinceCities(),
     makeProvinceHasCities(),
     makeShowDays(),
+    makeScaleMethod(),
   ],
   (
     selectedCountry,
@@ -177,6 +216,7 @@ const mapStateToProps = createSelector(
     cities,
     hasCities,
     showDays,
+    scaleMethod,
   ) => ({
     selectedCountry,
     availableCountries,
@@ -187,6 +227,7 @@ const mapStateToProps = createSelector(
     cities,
     hasCities,
     showDays,
+    scaleMethod,
   }),
 );
 
@@ -197,6 +238,7 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(setSelectedProvince(selectedProvince)),
   onSetSelectedCity: (selectedCity) => dispatch(setSelectedCity(selectedCity)),
   onSetShowDays: (showDays) => dispatch(setShowDays(showDays)),
+  onSetScaleMethod: (scaleMethod) => dispatch(setScaleMethod(scaleMethod)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChartSettings);

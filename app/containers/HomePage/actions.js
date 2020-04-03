@@ -10,6 +10,7 @@ import {
   FETCH_SUMMARY,
   SET_SUMMARY,
   SET_SHOW_DAYS,
+  SET_SCALE_METHOD,
 } from './constants';
 
 export const setSelectedCountry = (country) => ({
@@ -39,6 +40,11 @@ export const setSummary = (summary) => ({
 export const setShowDays = (showDays) => ({
   type: SET_SHOW_DAYS,
   payload: showDays,
+});
+
+export const setScaleMethod = (scaleMethod) => ({
+  type: SET_SCALE_METHOD,
+  payload: scaleMethod,
 });
 
 export const setAvailableCountries = (countries) => ({
