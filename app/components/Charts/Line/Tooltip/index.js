@@ -4,29 +4,49 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 
 const numberFormat = Intl.NumberFormat();
 
+const renderLabel = (label) =>
+  label ? (
+    <Typography gutterBottom variant="h6" component="h2">
+      {label}
+    </Typography>
+  ) : undefined;
+
+const renderConfirmedText = (value) =>
+  value ? (
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      component="p"
+    >{`Confirmed: ${numberFormat.format(value)}`}</Typography>
+  ) : undefined;
+
+const renderRecoveredText = (value) =>
+  value ? (
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      component="p"
+    >{`Recovered: ${numberFormat.format(value)}`}</Typography>
+  ) : undefined;
+
+const renderDeathsText = (value) =>
+  value ? (
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      component="p"
+    >{`Deaths: ${numberFormat.format(value)}`}</Typography>
+  ) : undefined;
+
 const LinechartTooltip = ({ active, payload, label }) => {
   if (active) {
     return (
       <Card variant="outlined">
         <CardContent>
-          <Typography gutterBottom variant="h6" component="h2">
-            {label}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-          >{`Confirmed: ${numberFormat.format(payload[0].value)}`}</Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-          >{`Recovered: ${numberFormat.format(payload[1].value)}`}</Typography>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            component="p"
-          >{`Deaths: ${numberFormat.format(payload[2].value)}`}</Typography>
+          {renderLabel(label)}
+          {renderConfirmedText(payload && payload[0] && payload[0].value)}
+          {renderRecoveredText(payload && payload[1] && payload[1].value)}
+          {renderDeathsText(payload && payload[2] && payload[2].value)}
         </CardContent>
       </Card>
     );
@@ -36,11 +56,11 @@ const LinechartTooltip = ({ active, payload, label }) => {
 };
 
 LinechartTooltip.propTypes = {
-  label: PropTypes.string.isRequired,
-  active: PropTypes.bool.isRequired,
+  label: PropTypes.string,
+  active: PropTypes.bool,
   payload: PropTypes.arrayOf(
     PropTypes.shape({
-      value: PropTypes.string,
+      value: PropTypes.number,
     }),
   ),
 };
