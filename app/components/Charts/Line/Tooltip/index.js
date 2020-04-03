@@ -44,9 +44,9 @@ const LinechartTooltip = ({ active, payload, label }) => {
       <Card variant="outlined">
         <CardContent>
           {renderLabel(label)}
-          {renderConfirmedText(payload && payload[0] && payload[0].value)}
-          {renderRecoveredText(payload && payload[1] && payload[1].value)}
-          {renderDeathsText(payload && payload[2] && payload[2].value)}
+          {payload && payload[0] && renderConfirmedText(payload[0].value)}
+          {payload && payload[1] && renderRecoveredText(payload[1].value)}
+          {payload && payload[2] && renderDeathsText(payload[2].value)}
         </CardContent>
       </Card>
     );

@@ -4,19 +4,34 @@ import { Card, CardContent, Typography } from '@material-ui/core';
 
 const numberFormat = new Intl.NumberFormat();
 
+const renderLabel = (label) =>
+  label ? (
+    <Typography gutterBottom variant="h6" component="h2">
+      {label}
+    </Typography>
+  ) : undefined;
+
+const renderContent = (cases, type) =>
+  cases && type ? (
+    <Typography variant="body2" color="textSecondary" component="p">
+      {`${numberFormat.format(cases)} ${type}`}
+    </Typography>
+  ) : undefined;
+
 const TreemapTooltip = ({ active, payload }) => {
   if (active) {
     return (
       <Card variant="outlined">
         <CardContent>
-          <Typography gutterBottom variant="h6" component="h2">
-            {payload[0].payload.root.name}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="p">
-            {`${numberFormat.format(payload[0].payload.cases)} ${
-              payload[0].payload.type
-            }`}
-          </Typography>
+          {payload &&
+            payload[0] &&
+            payload[0].payload &&
+            payload[0].payload.root &&
+            renderLabel(payload[0].payload.root.name)}
+          {payload[0].payload &&
+            payload[0].payload &&
+            payload[0].payload &&
+            renderContent(payload[0].payload.cases, payload[0].payload.type)}
         </CardContent>
       </Card>
     );
