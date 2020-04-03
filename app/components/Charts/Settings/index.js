@@ -10,6 +10,7 @@ import {
   Grid,
   Button,
   IconButton,
+  Box,
 } from '@material-ui/core';
 import { ToggleButtonGroup, ToggleButton } from '@material-ui/lab';
 import { Settings as SettingsIcon } from '@material-ui/icons';
@@ -89,7 +90,39 @@ const ChartSettings = ({
       <Dialog open={isOpen} onClose={handleClose}>
         <DialogTitle>Settings</DialogTitle>
         <DialogContent>
-          <Grid container direction="column">
+          <Box display={{ xs: 'block', md: 'none' }}>
+            <Grid container direction="column" spacing={2}>
+              <Grid item>
+                <ToggleButtonGroup
+                  value={scaleMethod}
+                  size="small"
+                  exclusive
+                  onChange={handleChangeScaleMethod}
+                >
+                  <ToggleButton value={SCALE_METHOD_LINEAR}>
+                    linear
+                  </ToggleButton>
+                  <ToggleButton value={SCALE_METHOD_LOGARITHMIC}>
+                    logarithmic
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
+              <Grid item>
+                <ToggleButtonGroup
+                  value={showDays}
+                  size="small"
+                  exclusive
+                  onChange={handleChangeShowDays}
+                >
+                  <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>
+                    last 7 days
+                  </ToggleButton>
+                  <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
+            </Grid>
+          </Box>
+          <Grid container direction="column" spacing={2}>
             <Grid item>
               <SelectCountry
                 selectedCountry={selectedCountry}
@@ -124,30 +157,34 @@ const ChartSettings = ({
       </Dialog>
       <Grid container spacing={2}>
         <Grid item>
-          <ToggleButtonGroup
-            value={scaleMethod}
-            size="small"
-            exclusive
-            onChange={handleChangeScaleMethod}
-          >
-            <ToggleButton value={SCALE_METHOD_LINEAR}>linear</ToggleButton>
-            <ToggleButton value={SCALE_METHOD_LOGARITHMIC}>
-              logarithmic
-            </ToggleButton>
-          </ToggleButtonGroup>
+          <Box display={{ xs: 'none', md: 'block' }}>
+            <ToggleButtonGroup
+              value={scaleMethod}
+              size="small"
+              exclusive
+              onChange={handleChangeScaleMethod}
+            >
+              <ToggleButton value={SCALE_METHOD_LINEAR}>linear</ToggleButton>
+              <ToggleButton value={SCALE_METHOD_LOGARITHMIC}>
+                logarithmic
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
         </Grid>
         <Grid item>
-          <ToggleButtonGroup
-            value={showDays}
-            size="small"
-            exclusive
-            onChange={handleChangeShowDays}
-          >
-            <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>
-              last 7 days
-            </ToggleButton>
-            <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
-          </ToggleButtonGroup>
+          <Box display={{ xs: 'none', md: 'block' }}>
+            <ToggleButtonGroup
+              value={showDays}
+              size="small"
+              exclusive
+              onChange={handleChangeShowDays}
+            >
+              <ToggleButton value={SHOW_DAYS_LAST_7_DAYS}>
+                last 7 days
+              </ToggleButton>
+              <ToggleButton value={SHOW_DAYS_ALL}>all days</ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
         </Grid>
         <Grid item>
           <IconButton size="medium" onClick={handleClick}>
